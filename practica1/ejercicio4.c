@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <sys/types.h> 
+#include <sys/types.h>
 #include <sys/wait.h>
+#include <unistd.h>
 
 
 #define NUM_PROC 3
@@ -14,13 +15,10 @@ int main (void){
 			printf("Error al emplear fork\n");
 			exit(EXIT_FAILURE);
 		} else if (pid == 0){
-			printf("HIJO %d\n”);
-		}else {
-			printf ("PADRE %d \n”);
+			printf("YO SOY HIJO %d, MI PADRE ES %d\n", getpid(), getppid());
+		} else {
+			printf ("YO SOY PADRE %d, MI HIJO ES %d \n", getpid(), pid);
 		}
 	}
 	exit(EXIT_SUCCESS);
 }
-
-
-
