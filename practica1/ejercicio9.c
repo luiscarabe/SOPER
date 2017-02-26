@@ -24,11 +24,11 @@ int main (int argc, char* argv[]){
 
     for(i=0; i<4 && pid!=0; i++){
 
-        if((pid=fork())==-1){
+        if((pid = fork()) == -1){
             perror("fork");
             exit(EXIT_FAILURE);
         }
-        else if (pid>0 && flag == 0){
+        /*else if (pid > 0 && flag == 0){
             close(pipe1[0]);
             close(pipe2[1]);
             close(pipe3[0]);
@@ -45,30 +45,32 @@ int main (int argc, char* argv[]){
             fprintf(stdout,"op 2 es %d\n", op2);
 
             sprintf(buffer,"%d,%d",op1,op2);
-            write(pipe1[1],buffer,strlen(buffer));
-            write(pipe3[1],buffer,strlen(buffer));
-            write(pipe5[1],buffer,strlen(buffer));
-            write(pipe7[1],buffer,strlen(buffer));
+            fprintf(stdout,"buffer %s\n", buffer );
+            write(pipe1[1],buffer,sizeof(buffer));
+            write(pipe3[1],buffer,sizeof(buffer));
+            write(pipe5[1],buffer,sizeof(buffer));
+            write(pipe7[1],buffer,sizeof(buffer));
             flag = 1;
-        }
-        else{
+            fprintf(stdout,"testing\n");
+
+        }*/
+        else if(pid==0){
 
             switch(i){
                 case 0:
                     close(pipe1[1]); /*0 leer, 1 escribir*/
                     close(pipe2[0]);/*en este se returnea res*/
                     /*bucle para cerrar los que este hijo no utiliza*/
-                    for(i=0;i<2;i++){
+                    /*for(i=0;i<2;i++){
                         close(pipe3[i]);
                         close(pipe4[i]);
                         close(pipe5[i]);
                         close(pipe6[i]);
                         close(pipe7[i]);
                         close(pipe8[i]);
-                    }
-                    read(pipe1[0], buffer, 3*sizeof(char));
-                    op1=atoi(&buffer[0]);
-                    op2=atoi(&buffer[2]);
+                    }*/
+                    read(pipe1[0], buffer, 100*sizeof(char));
+                    sscanf(buffer, "%d,%d", &op1, &op2);
                     res = op1 + op2;
                     sprintf(ret,"Datos enviados a traves de la tuberia por el proceso PID=%d. Operando1: %d. Operando2: %d. Suma:%d", getpid(), op1,op2,res);
                     write(pipe2[1],ret, sizeof(ret));
@@ -78,17 +80,17 @@ int main (int argc, char* argv[]){
                     close(pipe3[1]); /*0 leer, 1 escribir*/
                     close(pipe4[0]);/*en este se returnea res*/
                     /*bucle para cerrar los que este hijo no utiliza*/
-                    for(i=0;i<2;i++){
+                    /*for(i=0;i<2;i++){
                         close(pipe1[i]);
                         close(pipe2[i]);
                         close(pipe5[i]);
                         close(pipe6[i]);
                         close(pipe7[i]);
                         close(pipe8[i]);
-                    }
-                    read(pipe3[0], buffer, 3*sizeof(char));
-                    op1=atoi(&buffer[0]);
-                    op2=atoi(&buffer[2]);
+                    }*/
+                    read(pipe3[0], buffer, 100*sizeof(char));
+                    sscanf(buffer, "%d,%d", &op1, &op2);
+
                     res = op1 - op2;
                     sprintf(ret,"Datos enviados a traves de la tuberia por el proceso PID=%d. Operando1: %d. Operando2: %d. Resta:%d", getpid(), op1,op2,res);
                     write(pipe4[1],ret, sizeof(ret));
@@ -98,17 +100,17 @@ int main (int argc, char* argv[]){
                     close(pipe5[1]); /*0 leer, 1 escribir*/
                     close(pipe6[0]); /*en este se returnea res*/
                     /*bucle para cerrar los que este hijo no utiliza*/
-                    for(i=0;i<2;i++){
+                    /*for(i=0;i<2;i++){
                         close(pipe1[i]);
                         close(pipe2[i]);
                         close(pipe3[i]);
                         close(pipe4[i]);
                         close(pipe7[i]);
                         close(pipe8[i]);
-                    }
-                    read(pipe5[0], buffer, 3*sizeof(char));
-                    op1=atoi(&buffer[0]);
-                    op2=atoi(&buffer[2]);
+                    }*/
+                    read(pipe5[0], buffer, 100*sizeof(char));
+                    sscanf(buffer, "%d,%d", &op1, &op2);
+
                     res = op1 * op2;
                     sprintf(ret,"Datos enviados a traves de la tuberia por el proceso PID=%d. Operando1: %d. Operando2: %d. Multiplicacion:%d", getpid(), op1,op2,res);
                     write(pipe6[1],ret, sizeof(ret));
@@ -118,17 +120,16 @@ int main (int argc, char* argv[]){
                     close(pipe7[1]); /*0 leer, 1 escribir*/
                     close(pipe8[0]); /*en este se returnea res*/
                     /*bucle para cerrar los que este hijo no utiliza*/
-                    for(i=0;i<2;i++){
+                    /*for(i=0;i<2;i++){
                         close(pipe1[i]);
                         close(pipe2[i]);
                         close(pipe3[i]);
                         close(pipe4[i]);
                         close(pipe5[i]);
                         close(pipe6[i]);
-                    }
-                    read(pipe7[0], buffer, 3*sizeof(char));
-                    op1=atoi(&buffer[0]);
-                    op2=atoi(&buffer[2]);
+                    }*/
+                    read(pipe7[0], buffer, 100*sizeof(char));
+                    sscanf(buffer, "%d,%d", &op1, &op2);
                     res = op1 / op2;
                     sprintf(ret,"Datos enviados a traves de la tuberia por el proceso PID=%d. Operando1: %d. Operando2: %d. Division:%d", getpid(), op1,op2,res);
                     write(pipe8[1],ret, sizeof(ret));
@@ -136,15 +137,32 @@ int main (int argc, char* argv[]){
                     break;
             }
         }
-
     }
 
-    fprintf(stdout,"antesdelwait\n");
+    close(pipe1[0]);
+    close(pipe2[1]);
+    close(pipe3[0]);
+    close(pipe4[1]);
+    close(pipe5[0]);
+    close(pipe6[1]);
+    close(pipe7[0]);
+    close(pipe8[1]);
+
+    fprintf(stdout,"Introduce el primer operando:\n");
+    fscanf(stdin,"%d",&op1);
+    fprintf(stdout,"Introduce el segundo operando:\n");
+    fscanf(stdin, "%d",&op2);
+    sprintf(buffer,"%d,%d",op1,op2);
+
+    write(pipe1[1],buffer,sizeof(buffer));
+    write(pipe3[1],buffer,sizeof(buffer));
+    write(pipe5[1],buffer,sizeof(buffer));
+    write(pipe7[1],buffer,sizeof(buffer));
 
     for(i=0;i<4;i++){
         wait(NULL);
     }
-    fprintf(stdout,"despuesdelwait\n");
+
 
 
     read(pipe2[0],ret,sizeof(ret));
@@ -154,7 +172,7 @@ int main (int argc, char* argv[]){
     read(pipe6[0],ret,sizeof(ret));
     fprintf(stdout,"%s\n", ret);
     read(pipe8[0],ret,sizeof(ret));
-    fprintf(stdout,"%s", ret);
+    fprintf(stdout,"%s\n", ret);
 
     exit(EXIT_SUCCESS);
 }
