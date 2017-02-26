@@ -10,7 +10,6 @@ int main (int argc, char** argv){
     int pid = 1;
     int i;    
     char *prog[2];
-    char *aux; 
 
     if (argc < 2){
         printf("Error en los argumentos de entrada");
@@ -21,12 +20,6 @@ int main (int argc, char** argv){
         
         pid = fork();
 
-        aux = (char*)malloc(15*sizeof(char));
-
-        if(aux == NULL){
-            printf("Error en reservar memoria.\n");
-        }
-
         if(pid < 0){
             printf("Error en el fork.\n");
         }
@@ -36,8 +29,7 @@ int main (int argc, char** argv){
             prog[1] = NULL;
 
             if((strcmp(argv[argc-1], "-l")) == 0){
-                sprintf(aux, "/bin/%s", argv[i+1]);
-                execl(aux, prog[0], NULL);
+                execl(prog[0], prog[0], NULL);
                 perror("Error en exec");
                 exit(EXIT_FAILURE);
             }
@@ -48,8 +40,7 @@ int main (int argc, char** argv){
                 exit(EXIT_FAILURE);
             }
             else if((strcmp(argv[argc-1], "-v")) == 0){
-                sprintf(aux, "/bin/%s", argv[i+1]);
-                execv(aux, prog);
+                execv(prog[0], prog);
                 perror("Error en exec");
                 exit(EXIT_FAILURE);
             }
@@ -62,7 +53,6 @@ int main (int argc, char** argv){
                 printf("Error en el último parámetro.\n");
             } 
         }
-            free(aux);
     }
 
     for(i=0; i < (argc -2); i++){
