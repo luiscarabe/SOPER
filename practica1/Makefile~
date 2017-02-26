@@ -1,5 +1,5 @@
 CC = gcc
-EXE = ejercicio4a ejercicio4a2 ejercicio4b ejercicio4b2  ejercicio5a ejercicio5b ejercicio6 ejercicio8
+EXE = ejercicio4a ejercicio4a2 ejercicio4b ejercicio4b2  ejercicio5a ejercicio5b ejercicio6
 
 all : $(EXE)
 

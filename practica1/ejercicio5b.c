@@ -16,7 +16,7 @@ int main (void){
 			exit(EXIT_FAILURE);
 		}else if (pid == 0){
 			printf("HIJO con i: %d, mi pid es el %d y el de mi padre el %d.\n", i, getpid(), getppid());
-      exit(EXIT_SUCCESS);
+            exit(EXIT_SUCCESS);
 		}else{
 			printf ("PADRE %d\n", i);
 		}
