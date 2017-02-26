@@ -7,12 +7,12 @@
 
 
 int main (int argc, char* argv[]){
-    int pid;
+    int pid=1;
     int op1,op2;
     int res;
     int pipe1[2], pipe2[2], pipe3[2], pipe4[2];
     int pipe5[2], pipe6[2], pipe7[2], pipe8[2];
-    int i;
+    int i, flag=0;
     char buffer[10], ret[200];
 
 
@@ -28,7 +28,7 @@ int main (int argc, char* argv[]){
             perror("fork");
             exit(EXIT_FAILURE);
         }
-        else if (pid>0){
+        else if (pid>0 && flag == 0){
             close(pipe1[0]);
             close(pipe2[1]);
             close(pipe3[0]);
@@ -37,15 +37,19 @@ int main (int argc, char* argv[]){
             close(pipe6[1]);
             close(pipe7[0]);
             close(pipe8[1]);
-            fprintf(stdout,"Introduce el primer operando:");
+            fprintf(stdout,"Introduce el primer operando:\n");
             fscanf(stdin,"%d",&op1);
-            fprintf(stdout,"Introduce el segundo operando:");
+            fprintf(stdout,"op 1 es %d\n", op1);
+            fprintf(stdout,"Introduce el segundo operando:\n");
             fscanf(stdin, "%d",&op2);
+            fprintf(stdout,"op 2 es %d\n", op2);
+
             sprintf(buffer,"%d,%d",op1,op2);
             write(pipe1[1],buffer,strlen(buffer));
             write(pipe3[1],buffer,strlen(buffer));
             write(pipe5[1],buffer,strlen(buffer));
             write(pipe7[1],buffer,strlen(buffer));
+            flag = 1;
         }
         else{
 
@@ -135,18 +139,22 @@ int main (int argc, char* argv[]){
 
     }
 
+    fprintf(stdout,"antesdelwait\n");
+
     for(i=0;i<4;i++){
         wait(NULL);
     }
+    fprintf(stdout,"despuesdelwait\n");
+
 
     read(pipe2[0],ret,sizeof(ret));
-    printf("%s", ret);
+    fprintf(stdout,"%s\n", ret);
     read(pipe4[0],ret,sizeof(ret));
-    printf("%s", ret);
+    fprintf(stdout,"%s\n", ret);
     read(pipe6[0],ret,sizeof(ret));
-    printf("%s", ret);
+    fprintf(stdout,"%s\n", ret);
     read(pipe8[0],ret,sizeof(ret));
-    printf("%s", ret);
+    fprintf(stdout,"%s", ret);
 
     exit(EXIT_SUCCESS);
 }
