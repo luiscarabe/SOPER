@@ -28,47 +28,14 @@ int main (int argc, char* argv[]){
             perror("fork");
             exit(EXIT_FAILURE);
         }
-        /*else if (pid > 0 && flag == 0){
-            close(pipe1[0]);
-            close(pipe2[1]);
-            close(pipe3[0]);
-            close(pipe4[1]);
-            close(pipe5[0]);
-            close(pipe6[1]);
-            close(pipe7[0]);
-            close(pipe8[1]);
-            fprintf(stdout,"Introduce el primer operando:\n");
-            fscanf(stdin,"%d",&op1);
-            fprintf(stdout,"op 1 es %d\n", op1);
-            fprintf(stdout,"Introduce el segundo operando:\n");
-            fscanf(stdin, "%d",&op2);
-            fprintf(stdout,"op 2 es %d\n", op2);
 
-            sprintf(buffer,"%d,%d",op1,op2);
-            fprintf(stdout,"buffer %s\n", buffer );
-            write(pipe1[1],buffer,sizeof(buffer));
-            write(pipe3[1],buffer,sizeof(buffer));
-            write(pipe5[1],buffer,sizeof(buffer));
-            write(pipe7[1],buffer,sizeof(buffer));
-            flag = 1;
-            fprintf(stdout,"testing\n");
-
-        }*/
         else if(pid==0){
 
             switch(i){
                 case 0:
                     close(pipe1[1]); /*0 leer, 1 escribir*/
                     close(pipe2[0]);/*en este se returnea res*/
-                    /*bucle para cerrar los que este hijo no utiliza*/
-                    /*for(i=0;i<2;i++){
-                        close(pipe3[i]);
-                        close(pipe4[i]);
-                        close(pipe5[i]);
-                        close(pipe6[i]);
-                        close(pipe7[i]);
-                        close(pipe8[i]);
-                    }*/
+                
                     read(pipe1[0], buffer, 100*sizeof(char));
                     sscanf(buffer, "%d,%d", &op1, &op2);
                     res = op1 + op2;
@@ -79,15 +46,8 @@ int main (int argc, char* argv[]){
                 case 1:
                     close(pipe3[1]); /*0 leer, 1 escribir*/
                     close(pipe4[0]);/*en este se returnea res*/
-                    /*bucle para cerrar los que este hijo no utiliza*/
-                    /*for(i=0;i<2;i++){
-                        close(pipe1[i]);
-                        close(pipe2[i]);
-                        close(pipe5[i]);
-                        close(pipe6[i]);
-                        close(pipe7[i]);
-                        close(pipe8[i]);
-                    }*/
+
+
                     read(pipe3[0], buffer, 100*sizeof(char));
                     sscanf(buffer, "%d,%d", &op1, &op2);
 
@@ -99,15 +59,7 @@ int main (int argc, char* argv[]){
                 case 2:
                     close(pipe5[1]); /*0 leer, 1 escribir*/
                     close(pipe6[0]); /*en este se returnea res*/
-                    /*bucle para cerrar los que este hijo no utiliza*/
-                    /*for(i=0;i<2;i++){
-                        close(pipe1[i]);
-                        close(pipe2[i]);
-                        close(pipe3[i]);
-                        close(pipe4[i]);
-                        close(pipe7[i]);
-                        close(pipe8[i]);
-                    }*/
+
                     read(pipe5[0], buffer, 100*sizeof(char));
                     sscanf(buffer, "%d,%d", &op1, &op2);
 
@@ -119,15 +71,7 @@ int main (int argc, char* argv[]){
                 default:
                     close(pipe7[1]); /*0 leer, 1 escribir*/
                     close(pipe8[0]); /*en este se returnea res*/
-                    /*bucle para cerrar los que este hijo no utiliza*/
-                    /*for(i=0;i<2;i++){
-                        close(pipe1[i]);
-                        close(pipe2[i]);
-                        close(pipe3[i]);
-                        close(pipe4[i]);
-                        close(pipe5[i]);
-                        close(pipe6[i]);
-                    }*/
+
                     read(pipe7[0], buffer, 100*sizeof(char));
                     sscanf(buffer, "%d,%d", &op1, &op2);
                     res = op1 / op2;
