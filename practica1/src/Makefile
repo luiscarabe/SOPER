@@ -11,5 +11,5 @@ $(EXE) : % : %.c
 	$(CC) -o  $@ $@.c
 
 .PHONY : clean
-	clean :
+clean :
 		rm -f *.o core $(EXE)
