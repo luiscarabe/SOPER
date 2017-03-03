@@ -9,7 +9,7 @@
 int main (int argc, char* argv[]){
     int pid=1;
     int op1,op2;
-    int res;
+    double res;
     int pipe1[2], pipe2[2], pipe3[2], pipe4[2];
     int pipe5[2], pipe6[2], pipe7[2], pipe8[2];
     int i, flag=0;
@@ -35,11 +35,11 @@ int main (int argc, char* argv[]){
                 case 0:
                     close(pipe1[1]); /*0 leer, 1 escribir*/
                     close(pipe2[0]);/*en este se returnea res*/
-                
+
                     read(pipe1[0], buffer, 100*sizeof(char));
                     sscanf(buffer, "%d,%d", &op1, &op2);
                     res = op1 + op2;
-                    sprintf(ret,"Datos enviados a traves de la tuberia por el proceso PID=%d. Operando1: %d. Operando2: %d. Suma:%d", getpid(), op1,op2,res);
+                    sprintf(ret,"Datos enviados a traves de la tuberia por el proceso PID=%d. Operando1: %d. Operando2: %d. Suma: %.0f", getpid(), op1,op2,res);
                     write(pipe2[1],ret, sizeof(ret));
                     exit(EXIT_SUCCESS);
                     break;
@@ -52,7 +52,7 @@ int main (int argc, char* argv[]){
                     sscanf(buffer, "%d,%d", &op1, &op2);
 
                     res = op1 - op2;
-                    sprintf(ret,"Datos enviados a traves de la tuberia por el proceso PID=%d. Operando1: %d. Operando2: %d. Resta:%d", getpid(), op1,op2,res);
+                    sprintf(ret,"Datos enviados a traves de la tuberia por el proceso PID=%d. Operando1: %d. Operando2: %d. Resta: %.0f", getpid(), op1,op2,res);
                     write(pipe4[1],ret, sizeof(ret));
                     exit(EXIT_SUCCESS);
                     break;
@@ -64,7 +64,7 @@ int main (int argc, char* argv[]){
                     sscanf(buffer, "%d,%d", &op1, &op2);
 
                     res = op1 * op2;
-                    sprintf(ret,"Datos enviados a traves de la tuberia por el proceso PID=%d. Operando1: %d. Operando2: %d. Multiplicacion:%d", getpid(), op1,op2,res);
+                    sprintf(ret,"Datos enviados a traves de la tuberia por el proceso PID=%d. Operando1: %d. Operando2: %d. Multiplicacion: %.0f", getpid(), op1,op2,res);
                     write(pipe6[1],ret, sizeof(ret));
                     exit(EXIT_SUCCESS);
                     break;
@@ -74,8 +74,8 @@ int main (int argc, char* argv[]){
 
                     read(pipe7[0], buffer, 100*sizeof(char));
                     sscanf(buffer, "%d,%d", &op1, &op2);
-                    res = op1 / op2;
-                    sprintf(ret,"Datos enviados a traves de la tuberia por el proceso PID=%d. Operando1: %d. Operando2: %d. Division:%d", getpid(), op1,op2,res);
+                    res = (double)op1 / op2;
+                    sprintf(ret,"Datos enviados a traves de la tuberia por el proceso PID=%d. Operando1: %d. Operando2: %d. Division: %.3f", getpid(), op1,op2,res);
                     write(pipe8[1],ret, sizeof(ret));
                     exit(EXIT_SUCCESS);
                     break;

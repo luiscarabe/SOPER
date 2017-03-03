@@ -18,23 +18,7 @@ int main (void){
 		} else if (pid == 0){
 			printf("HIJO con i: %d, mi pid es el %d y el de mi padre el %d.\n",i, getpid(), getppid());
 		} else {
-			printf ("PADRE %d\n", i);
-            /*Codigo copiado*/
-            pid2=fork();
-            if(pid2==0){
-                pid3 = getppid();
-                /*Se convierte el pid en char* para pdoer pasarlo como arg de execlp*/
-                sprintf(aux,"%d", pid3);
-                printf("\n");
-                /*-p incluye los pids en el arbol, al poner el numero este proceso actua como raiz*/
-                execlp("pstree", "pstree", aux, "-p", NULL);
-                perror("Error en exec");
-                exit(EXIT_FAILURE);
-            }
-            else{
-                waitpid(pid2, NULL,0);
-            }
-            /*Fin del codigo copiado*/
+			printf ("PADRE %d con pid %d\n", i, getpid());
 		}
 	}
 	exit(EXIT_SUCCESS);

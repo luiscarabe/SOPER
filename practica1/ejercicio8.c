@@ -8,17 +8,17 @@
 
 int main (int argc, char** argv){
     int pid = 1;
-    int i;    
+    int i;
     char *prog[2];
     char *aux;
 
     if (argc < 2){
         printf("Error en los argumentos de entrada");
         exit(EXIT_FAILURE);
-    }    
-    
+    }
+
     for(i = 0; i < (argc-2) && pid > 0; i++){
-        
+
         pid = fork();
 
         if(pid < 0){
@@ -35,7 +35,7 @@ int main (int argc, char** argv){
                 perror("Error al resevar memoria.\n");
                 exit(EXIT_FAILURE);
             }
-            
+
             sprintf(aux, "/bin/%s", prog[0]);
 
 
@@ -66,7 +66,7 @@ int main (int argc, char** argv){
             }
             else {
                 printf("Error en el último parámetro.\n");
-            } 
+            }
             free(aux);
         }
 

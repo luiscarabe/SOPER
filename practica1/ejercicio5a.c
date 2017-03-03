@@ -18,8 +18,8 @@ int main (void){
 			printf("HIJO con i: %d, mi pid es el %d y el de mi padre el %d.\n", i, getpid(), getppid());
 		}else{
 			printf ("PADRE %d\n", i);
-			wait(NULL);
 		}
 	}
+    wait(NULL);
 	exit(EXIT_SUCCESS);
 }
