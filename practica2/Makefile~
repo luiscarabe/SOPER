@@ -1,5 +1,5 @@
 CC = gcc -g -Wall -ansi -pedantic -O3 -lm -lpthread -pthread
-EXE = ejercicio3a ejercicio3b ejercicio4a ejercicio4b
+EXE = ejercicio3a ejercicio3b ejercicio4a
 
 all : $(EXE)
 
