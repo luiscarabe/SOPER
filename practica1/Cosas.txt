@@ -1,2 +1,0 @@
-4)
-	Existen procesos huérfanos, ya que en el 4a no hay wait() y por tanto, el padre no espera a que ningún hijo termine. En el 4b hay wait(), pero solo uno y fuera del bucle, por tanto, como wait solo espera a un hijo, ya en el proceso padre principal, se generan 3 procesos hijos, esto provoca que sigan quedando procesos huérfanos tras el wait.
