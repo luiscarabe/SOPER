@@ -48,7 +48,7 @@ int main(int argc, char* argv[]){
     pthread_t ids[100];
 
     if (argc != 2){
-        perror("Es necesario pasar como argumento el numero de primos a calcular");
+        perror("Es necesario pasar como argumento el numero de primos a calcular\n");
         exit(EXIT_FAILURE);
     }
     
@@ -68,6 +68,6 @@ int main(int argc, char* argv[]){
 
     time = ((time2.tv_sec - time1.tv_sec)*1e6 + (time2.tv_usec - time1.tv_usec))*1e-6;
 
-    printf("El programa %s termino correctamente, con un tiempo de %lf segundos.\n", argv[0], time);
+    printf("El programa %s termino correctamente, con un tiempo de %f segundos.\n", argv[0], time);
     exit(EXIT_SUCCESS);
 }

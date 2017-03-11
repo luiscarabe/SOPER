@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <math.h>
 #include <sys/time.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 typedef enum {FALSE=0, TRUE=1} Bool;
 
@@ -61,6 +63,6 @@ int main(int argc , char *argv[]) {
 
 
 
-    printf("El programa %s termino correctamente, con un tiempo de %lf segundos.\n", argv[0], time);
+    printf("El programa %s termino correctamente, con un tiempo de %f segundos.\n", argv[0], time);
     exit(EXIT_SUCCESS);
 }

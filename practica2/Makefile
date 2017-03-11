@@ -1,7 +1,9 @@
 CC = gcc -g -Wall -ansi -pedantic -O3 -lm -lpthread -pthread
-EXE = ejercicio3b
+EXE = ejercicio3a ejercicio3b
 
 all : $(EXE)
+
+.PHONY : clean
 
 $(EXE) : % : %.c 
 	@echo "#---------------------------"
@@ -10,6 +12,6 @@ $(EXE) : % : %.c
 	@echo "# Ha cambiado $<"
 	$(CC) -o  $@ $@.c -lm
 
-.PHONY : clean
+
 clean :
 	rm -f *.o core $(EXE)
