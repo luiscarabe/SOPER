@@ -24,12 +24,12 @@ Bool es_primo(int p){
 
 void* threadbehaviour(void* n){
     int counter;
-    int i, num;
+    int *num, i;
 
-    num = *((int*)n); 
+    num = (int*)n; 
     counter = 0;
 
-    for(i=1; counter!=num; i++){
+    for(i=1; counter!=*num; i++){
 
         if(es_primo(i)){
             counter++;
