@@ -22,7 +22,7 @@ Bool es_primo(int p){
     return TRUE;
 } 
 
-void* threadbehavior(void* n){
+void* threadbehaviour(void* n){
     int counter;
     int i, num;
 
@@ -58,16 +58,15 @@ int main(int argc, char* argv[]){
     gettimeofday(&time1,NULL);
 
     for(i=0; i < 100; i++){
-        pthread_create(&ids[i],NULL, threadbehavior, (void*) &n);
+        pthread_create(&ids[i], NULL, threadbehaviour, (void*) &n);
     }
 
     for(i=0; i < 100; i++){
         pthread_join(ids[i], NULL);
     }
 
-    gettimeofday(&time2,NULL);
-
-    time = ((time2.tv_sec - time1.tv_sec)*1e6 + (time2.tv_usec - time1.tv_usec))*1e-6;
+    gettimeofday(&time2, NULL);
+    time = (time2.tv_sec - time1.tv_sec) + (time2.tv_usec - time1.tv_usec)*1e-6;
 
     printf("El programa %s termino correctamente, con un tiempo de %f segundos.\n", argv[0], time);
     exit(EXIT_SUCCESS);

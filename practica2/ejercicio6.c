@@ -11,12 +11,18 @@ int main(){
     pid=fork();
 
     if(pid==0){
-        printf("Soy el proceso hijo con pid %d\n", getpid());
-        sleep(5);
+        pid = getpid();
+        while(1){
+            printf("Soy el proceso hijo con pid %d\n", pid);
+            sleep(5);
+        }
     }
     else{
         sleep(30);
-        kill(pid,9);
+        if(kill(pid,9) == -1){
+            perror("Se ha producido un error enviando la señal");
+            exit(EXIT_FAILURE);
+        }
         exit(EXIT_SUCCESS);
     }
 }
