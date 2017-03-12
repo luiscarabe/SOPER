@@ -9,6 +9,7 @@
 typedef enum {FALSE=0, TRUE=1} Bool;
 
 
+
 Bool es_primo(int p){
     int i;
     int s;
