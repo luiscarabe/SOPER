@@ -8,10 +8,11 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <sys/types.h>
-#include <sys/wait.h>
+#include <string.h>
 #include <unistd.h>
 #include <signal.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <time.h> 
 
 
@@ -42,9 +43,8 @@ int main (int argc , char *argv[]){
 
     signal(SIGUSR1,manejador_SIGUSR1);
 
-    signal(SIGTERM,manejador_SIGTERM);
-
     rootpid = getpid();
+    printf("root1 %d\n", rootpid);
     counter = 0;
 
     pid=0;
@@ -57,7 +57,7 @@ int main (int argc , char *argv[]){
         }else if (pid == 0){
             if (i == N-1){
                 sleep(5);
-                printf("justo antes del kill");
+                printf("justo antes del kill root %d pid %d\n", rootpid, getpid());
                 if(kill(rootpid,16) == -1){
                     perror("Se ha producido un error enviando la señal");
                     exit(EXIT_FAILURE);
@@ -66,31 +66,15 @@ int main (int argc , char *argv[]){
         }else{
         }
     }
-    sleep(300);
+
     wait(NULL);
     exit(EXIT_SUCCESS);
 }
 
-void manejador_SIGTERM(int sig){
-    sleep(1);
-     if(i == N-1){
-        if(kill(rootpid,15) == -1){
-            perror("Se ha producido un error enviando la señal");
-            exit(EXIT_FAILURE);
-        }
-    }
-    else if(kill(pid,15) == -1 && i != 0){
-        perror("Se ha producido un error enviando la señal");
-        exit(EXIT_FAILURE);
-    }
-    printf("Muere PID= %d \n", getpid());
-    exit(EXIT_SUCCESS);
-
-}
 
 void manejador_SIGUSR1(int sig){
 
-    printf("Hola PID= %d, time= %s \n", getpid(), gettime());
+    printf("Hola PID= %d\n", getpid());
     sleep(2);
     if(i == N-1){
         if(kill(rootpid,16) == -1){
@@ -121,13 +105,3 @@ void manejador_SIGUSR1(int sig){
 
 }
 
-char* gettime() {
-    time_t tiempo = time(0);
-    struct tm *tlocal = localtime(&tiempo);
-    char* output;
-
-    output=(char*)malloc(128*sizeof(char));
-
-    strftime(output, 128, "%d/%m/%y %H:%M:%S", tlocal);
-    return output;
-} 

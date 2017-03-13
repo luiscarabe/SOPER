@@ -62,7 +62,7 @@ void* threadbehaviour(void* n){
     int i, j;
     int resultado;    
     args* datos = (args*) n;    
-    datos->row=0;
+    
 
     for(i=0;i<datos->dim;i++){
         
@@ -108,11 +108,13 @@ int main(int argc, char* argv[]){
         exit(EXIT_FAILURE);
     }
     operacion1->dim = dim;
+    operacion1->row=0;
     operacion2=(args*)malloc(sizeof(args));
     if(operacion2 == NULL){
         exit(EXIT_FAILURE);
     }
     operacion2->dim = dim;
+    operacion2->row=0;
 
     printf("Introduzca multiplicador 1:\n");
     scanf("%d", &operacion1->mult);

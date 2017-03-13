@@ -1,5 +1,5 @@
-CC = gcc -g -ansi -pedantic -lm -lpthread -pthread
-EXE = ejercicio3a ejercicio3b ejercicio4a ejercicio4b ejercicio6
+CC = gcc -g -Wall -ansi -pedantic 
+EXE = ejercicio3a ejercicio3b ejercicio4a ejercicio4b ejercicio6 ejercicio8 prueba8
 
 all : $(EXE)
 
@@ -10,7 +10,7 @@ $(EXE) : % : %.c
 	@echo "# Generando $@ "
 	@echo "# Depende de $^"
 	@echo "# Ha cambiado $<"
-	$(CC) -o  $@ $@.c -lm
+	$(CC) -o  $@ $@.c -lm -lpthread
 
 
 clean :
