@@ -14,7 +14,6 @@
 #include <signal.h>
 #include <time.h> 
 
-
 int pid, rootpid;
 int i;
 int N,V;
@@ -29,45 +28,48 @@ char* gettime();
 
 int main (int argc , char *argv[]){
 
-    void manejador_SIGUSR1();
-    void manejador_SIGTERM();
+    void manejador_SIGUSR1 ( );
+    void manejador_SIGTERM ( );
 
     if(argc < 3){
-        perror("Error en los parametros de entrada.\n");
+        perror("Error en los pará,etros de entrada.\n");
         exit(EXIT_FAILURE);
     }
 
     N = atoi(argv[1]);
     V = atoi(argv[2]);
 
-    signal(SIGUSR1,manejador_SIGUSR1);
+    if(signal(SIGUSR1,manejador_SIGUSR1)==SIG_ERR){
+        perror("Error en la captura.\n");
+        exit(EXIT_FAILURE);
+    }
 
-    signal(SIGTERM,manejador_SIGTERM);
+    if(signal(SIGTERM,manejador_SIGTERM)==SIG_ERR){
+        perror("Error en la captura.\n");
+        exit(EXIT_FAILURE);
+    }
 
     rootpid = getpid();
     counter = 0;
 
     pid=0;
     for (i=0; i < N && pid == 0; i++){
-
-        printf("%d\n", i);
         if ((pid=fork()) < 0 ){
             printf("Error haciendo fork\n");
             exit(EXIT_FAILURE);
         }else if (pid == 0){
             if (i == N-1){
                 sleep(5);
-                printf("justo antes del kill");
-                if(kill(rootpid,16) == -1){
+                if(kill(rootpid,10) == -1){
                     perror("Se ha producido un error enviando la señal");
                     exit(EXIT_FAILURE);
                 }
             }
         }else{
+            pause();
         }
     }
-    sleep(300);
-    wait(NULL);
+
     exit(EXIT_SUCCESS);
 }
 
@@ -89,11 +91,10 @@ void manejador_SIGTERM(int sig){
 }
 
 void manejador_SIGUSR1(int sig){
-
     printf("Hola PID= %d, time= %s \n", getpid(), gettime());
     sleep(2);
     if(i == N-1){
-        if(kill(rootpid,16) == -1){
+        if(kill(rootpid,10) == -1){
             perror("Se ha producido un error enviando la señal");
             exit(EXIT_FAILURE);
         }
@@ -106,18 +107,15 @@ void manejador_SIGUSR1(int sig){
                 exit(EXIT_FAILURE);
             }
         }
-        else if(kill(pid,16) == -1){
+        else if(kill(pid,10) == -1){
             perror("Se ha producido un error enviando la señal");
             exit(EXIT_FAILURE);
         }
     }
-    else if(kill(pid,16) == -1){
+    else if(kill(pid,10) == -1){
         perror("Se ha producido un error enviando la señal");
         exit(EXIT_FAILURE);
     }
-
-    signal(SIGUSR1,manejador_SIGUSR1);
-
 
 }
 

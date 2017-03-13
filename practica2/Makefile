@@ -1,5 +1,5 @@
 CC = gcc -g -Wall -ansi -pedantic 
-EXE = ejercicio3a ejercicio3b ejercicio4a ejercicio4b ejercicio6 ejercicio8 prueba8
+EXE = ejercicio3a ejercicio3b ejercicio4a ejercicio4b ejercicio6 ejercicio8 prueba8 pruebaenunciado
 
 all : $(EXE)
 

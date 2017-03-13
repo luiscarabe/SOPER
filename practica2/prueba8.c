@@ -74,6 +74,8 @@ int main (int argc , char *argv[]){
 
 void manejador_SIGUSR1(int sig){
 
+    signal(sig,SIG_IGN);
+
     printf("Hola PID= %d\n", getpid());
     sleep(2);
     if(i == N-1){
@@ -100,7 +102,7 @@ void manejador_SIGUSR1(int sig){
         exit(EXIT_FAILURE);
     }
 
-    signal(SIGUSR1,manejador_SIGUSR1);
+    signal(sig,manejador_SIGUSR1);
 
 
 }
