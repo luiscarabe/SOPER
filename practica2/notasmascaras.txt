@@ -1,0 +1,67 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/wait.h>
+#include <time.h> 
+
+
+/*Creacion de conjuntos para mascaras*/
+
+int sigfillset(sigset_t *set); /*Inluye en set todas las señales. Bloquea todas las señales*/
+int sigemptyset(sisgset_t*set;) /* Excluye de set todas las señales, desbloqueando su recepcion.*/
+/* 0 OK, -1, ERROR*/
+
+/*Modificacion*/
+/*signo es el id de la señal*/
+
+int sigaddset (sigset_t *set, int signo); /*Añade una señal a un set*/
+int sigdelset(sigset_t *set, int signo);  /*Borra una señal a un set*/
+/*Las dos, 0 si OK, -1 EROR*/
+int sigismember( const sigset_t *set, int signo); /*Pregunta si una señal esta en un set*/
+/* 1 si pertenece, 0 si no pertenece, -1 ERROR*/
+
+/* Creacion de mascaras*/
+
+/*Modifica la mascara de señales antigua, que quedará guardada en oldset (if not NULL), 
+ a partir de las señales de set y del valor how.
+ HOW:
+SIG_BLOCK: La nueva mascara es la union de set y mascara actual.
+SIG_SETMASK: La nueva mascara es directamente set.
+SIG_UNBLOCK: Las señales de set se desbloquean en la mascara actual
+ 
+ Retorno:
+ 0: OK
+ -1: ERROR*/
+int sigprocmask(int how, const sigset_t *set, sigset_t *oldset);
+
+
+/**Señales bloqueadas en espera de ser entregadas*/
+
+int sigpending(sisgset_t *mask)
+/* Se almacena en mask el cjto de señales bloqueadas*/
+/* 0 OK, -1 ERROR*/
+
+
+/** ESPERA DE SEÑALES*/
+
+int sigsuspend(const sigset_t mask);
+/*Reemplaza la mascara actual por mask (temporalmente) y espera a que llegue una señal
+ Luego reestablece la mascara anterior (entiendo que espera por la señal que no esta bloqueada)*/
+
+
+/*Temporizacion*/
+/* en <unistd.h> , el resto estaban en signal*/
+/*<sys/param.h>*/
+
+unisgned int alarm(unisigned int seconds);
+/* Envia una señal SIGALRM al cabo de seconds segundos*/
+/* Numero de segundos hasta la siguiente alarma o 0 si no hay otra alarma*/
+
+
+/*cancela una alarma.*/
+alarm(0)
+
+/*LOS PROCESOS HIJOS NO HEREDAN ALARMAS*/
+
