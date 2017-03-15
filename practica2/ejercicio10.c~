@@ -65,7 +65,7 @@ int main(){
     }
 
     for(i=0; i<50;i++){
-        printf("Iteracion %d\n", i);
+        
         if(pid == 0){
             
             f=fopen("ficheroe10.txt", "a");
