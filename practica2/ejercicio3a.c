@@ -1,3 +1,14 @@
+/**
+* @brief Programa correspondiente al ejercicio 3a de la practica 2 de sistemas operativos
+*
+* Este programa servira para generar 100 procesos y que cada uno busque los N primeros primos.
+* 
+* @file ejercicio3a.c
+* @author Luis Carabe y Emilio Cuesta
+* @date 17-03-2017
+*/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,17 +20,21 @@
 
 typedef enum {FALSE=0, TRUE=1} Bool;
 
-Bool es_primo(int p){
-    int i;
-    double s;
-    s = sqrt(p);
-    for (i = 2; i <= s; i++){
-        if ((p % i) == 0){
-            return FALSE;
-        }
-    }
-    return TRUE;
-} 
+/**
+* @brief Funcion que nos dice si un numero es primo
+*
+* @param p numero para analizar
+* @return TRUE en caso de que sea primo o FALSE en caso contrario
+*/
+
+Bool es_primo(int p);
+
+/**
+* @brief Funcion main del programa
+*
+* @param argv puntero de string que contiene N, es decir, cuantos primos queremos que calcule cada proceso
+* @return EXIT_SUCCESS si no ha habido errores, EXIT_FAILURE en caso contrario
+*/
 
 int main(int argc , char *argv[]) {
     int pid;
@@ -34,6 +49,8 @@ int main(int argc , char *argv[]) {
     }
 
     n = atoi(argv[1]);
+    
+    /*Miramos el tiempo actual y empezamos a crear procesos*/
 
     gettimeofday(&time1, NULL);
 
@@ -53,9 +70,13 @@ int main(int argc , char *argv[]) {
         }
     }
 
+    /*Esperamos a los hijos*/
+
     for(i=0; i < 100; i++){
         wait(NULL);
     }
+
+    /*Volvemos a mirar el tiempo y calculamos los segundos que han transcurrido*/
 
     gettimeofday(&time2, NULL);
 
@@ -64,5 +85,18 @@ int main(int argc , char *argv[]) {
 
 
     printf("El programa %s termino correctamente, con un tiempo de %f segundos.\n", argv[0], time);
+
     exit(EXIT_SUCCESS);
 }
+
+Bool es_primo(int p){
+    int i;
+    double s;
+    s = sqrt(p);
+    for (i = 2; i <= s; i++){
+        if ((p % i) == 0){
+            return FALSE;
+        }
+    }
+    return TRUE;
+} 
