@@ -1,11 +1,13 @@
-CC = gcc -g -Wall -pedantic 
-EXE = ejercicio3a ejercicio3b ejercicio4a ejercicio4b ejercicio6 ejercicio8 ejercicio10 prueba8 pruebaenunciado
+
+CC = gcc -g -Wall -ansi -pedantic
+EXE = ejercicio3a ejercicio3b ejercicio4a ejercicio4b ejercicio6 ejercicio8 ejercicio10
+
 
 all : $(EXE)
 
 .PHONY : clean
 
-$(EXE) : % : %.c 
+$(EXE) : % : %.c
 	@echo "#---------------------------"
 	@echo "# Generando $@ "
 	@echo "# Depende de $^"
@@ -15,5 +17,3 @@ $(EXE) : % : %.c
 
 clean :
 	rm -f *.o core $(EXE)
-
-

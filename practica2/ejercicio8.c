@@ -1,12 +1,15 @@
 /**
-* @brief 
-* 
-* @file 
+* @brief Programa correspondiente al ejercicio 8 de la práctica 2 de sistemas operativos
+*
+* Este programa servira para generar N procesos en serie, el último proceso creado enviara una señal SIGUSR1 al padre
+* principal, que enviara la señal a su hijo, asi sucesivamente hasta que llega al final y vuelve al padre. Este, contara
+* las veces que ha dado la vuelta la señal, cuando llegue a un numero V, empezará a pasar la señal SIGTRM a su hijo,
+* este a su hijo... sucesivamente hasta que el último se la envia al padre. Con SIGTRM los procesos terminan.
+*
+* @file ejercicio8.c
 * @author Luis Carabe y Emilio Cuesta
-* @date 
+* @date 17-03-2017
 */
-
-#define _POSIX_SOURCE
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -23,14 +26,23 @@ int counter;
 char* output;
 
 /**
- * @brief Funcion main del programa.
- * @return EXIT_SUCCESS si no habido errores, EXIT_FAILURE en caso contrario.
- */
+* @brief Funcion que guarda en un char* la fecha y la hora
+*
+* @return Sin retorno
+*/
 
-void gettime();
+void gettime(); /*El código de la función está más abajo*/
+
+/**
+* @brief Funcion main del programa
+*
+* @param argv puntero de string que contiene N (numero de procesos) y V (numero de vueltas)
+* @return EXIT_SUCCESS si no ha habido errores, EXIT_FAILURE en caso contrario
+*/
 
 int main (int argc , char *argv[]){
 
+    /*Declaramos los manejadores*/
     void manejador_SIGUSR1 ( );
     void manejador_SIGTERM ( );
 
@@ -53,79 +65,106 @@ int main (int argc , char *argv[]){
     }
 
     rootpid = getpid();
-    printf("HOLA SOY TU PADRE: %d\n", rootpid);
     counter = -1;
 
     pid=0;
+    /*Hacemos los forks en serie*/
     for (i=0; i < N && pid == 0; i++){
         if ((pid=fork()) < 0 ){
             printf("Error haciendo fork\n");
             exit(EXIT_FAILURE);
         }else if (pid == 0){
+            /*Si estamos en el último hijo, espera 5 segundos y envía la señal SIGUSR1 al padre principal*/
             if (i == N-1){
                 sleep(5);
-                if(kill(rootpid,10) == -1){
+                if(kill(rootpid,SIGUSR1) == -1){
                     perror("Se ha producido un error enviando la señal");
                     exit(EXIT_FAILURE);
                 }
+            /*Aumentamos el i del último hijo para que no sea igual que su proceso padre*/
+
             i++;
             }
         }else{
         }
     }
 
-    for(;counter < V ;)
+    /*Realizamos los pause() correspondientes*/
+
+    while(counter < V)
         pause();
     pause();
 
     exit(EXIT_SUCCESS);
 }
 
+/**
+* @brief Funcion manejador para la señal SIGTERM, en este caso, su funcionalidad es que envie una señal identica al hijo, imprima un mensaje y haga exit.
+*   Si llega al ultimo hijo, se la envia al padre principal
+*
+* @param sig numero de señal que tiene que manejar
+* @return EXIT_SUCCESS si no ha habido errores, EXIT_FAILURE en caso contrario
+*/
+
 void manejador_SIGTERM(int sig){
     sleep(1);
+    /*Si estamos en el ultimo hijo envia la señal al padre principal*/
     if(i == N+1){
-        if(kill(rootpid,15) == -1){
+        if(kill(rootpid,SIGTERM) == -1){
             perror("Se ha producido un error enviando la señal1");
             exit(EXIT_FAILURE);
         }
     }
+    
+    /*Si no es el padre (ni el último hijo), pasa la señal a su hijo)*/
     else if (i != 1){
-        if(kill(pid,15) == -1){
+        if(kill(pid,SIGTERM) == -1){
             perror("Se ha producido un error enviando la señal2");
             exit(EXIT_FAILURE);
         }
     }
+
     printf("Muere PID= %d \n", getpid());
     exit(EXIT_SUCCESS);
-
 }
 
+/**
+* @brief Funcion manejador para la señal SIGUSR1, en este caso, su funcionalidad es queimprima un mensaje y envie una señal identica al hijo.
+*   Si llega al ultimo hijo, se la envia al padre principal, mientras este va contando las vueltas que lleva para saber cuando parar y enviar SIGTERM a su hijo.
+*
+* @param sig numero de señal que tiene que manejar
+* @return EXIT_SUCCESS si no ha habido errores, EXIT_FAILURE en caso contrario
+*/
+
 void manejador_SIGUSR1(int sig){
+    /*Miramos la hora e imprimimos el mensaje*/
     gettime();
     printf("Hola PID= %d, time= %s \n", getpid(), output);
     free(output);
     sleep(2);
+    /*Si estamos en el último hijo, pasamos la señal al padre principal*/
     if(i == N+1){
-        if(kill(rootpid,10) == -1){
+        if(kill(rootpid,SIGUSR1) == -1){
             perror("Se ha producido un error enviando la señal3");
             exit(EXIT_FAILURE);
         }
     }
+    /*Si estamos en el padre, aumentamos el contador y miramos si ya hemos llegado a V, en tal caso,*/
+    /* empieza a enviar SIGTERM, si no, envía SIGUSR1*/
     else if(i == 1){
         counter ++;
-        printf("He entrado en el padre y el counter es: %d\n", counter);
         if (V == counter){
-            if(kill(pid,15) == -1){
+            if(kill(pid,SIGTERM) == -1){
                 perror("Se ha producido un error enviando la señal4");
                 exit(EXIT_FAILURE);
             }
         }
-        else if(kill(pid,10) == -1){
+        else if(kill(pid,SIGUSR1) == -1){
             perror("Se ha producido un error enviando la señal5");
             exit(EXIT_FAILURE);
         }
     }
-    else if(kill(pid,10) == -1){
+    else if(kill(pid,SIGUSR1) == -1){
         perror("Se ha producido un error enviando la señal6");
         exit(EXIT_FAILURE);
     }
