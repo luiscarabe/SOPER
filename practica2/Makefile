@@ -1,5 +1,5 @@
 
-CC = gcc -g -Wall -ansi -pedantic
+CC = gcc -g -Wall -pedantic
 EXE = ejercicio3a ejercicio3b ejercicio4a ejercicio4b ejercicio6 ejercicio8 ejercicio10
 
 
