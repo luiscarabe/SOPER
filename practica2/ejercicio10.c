@@ -9,30 +9,26 @@
 
 #define TAMANIO 13
 
+
 void manejador_SIGALRM(int sig){
     if(kill(getppid(), SIGUSR1) == -1){
         perror("Se ha producido un error enviando la señal1");
         exit(EXIT_FAILURE);
     }
+
+    if(signal(SIGALRM,manejador_SIGALRM)==SIG_ERR){
+        perror("Error en la captura.\n");
+        exit(EXIT_FAILURE);
+    }
 }
 
 void manejador_SIGUSR1(int sig){
-    FILE* f;
-    char aux[20];
+    printf("Senial recibida!\n");
+    if(signal(SIGUSR1,manejador_SIGUSR1)==SIG_ERR){
+        perror("Error en la captura.\n");
+        exit(EXIT_FAILURE);
+    }
 
-    f=fopen("ficheroe10.txt", "r");
-    fscanf(f,"%s", aux);
-    printf("El padre ha leido : %s", aux);
-
-    fclose(f);     
-}
-
-
-void manejador_SIGUSR2(int sig){
-    
-
-    fork();
-         
 }
 
 
@@ -48,44 +44,52 @@ int main(){
         exit(EXIT_FAILURE);
     }
 
-    if(signal(SIGALRM,manejador_SIGALRM)==SIG_ERR){
-        perror("Error en la captura.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    if(signal(SIGUSR2,manejador_SIGUSR2)==SIG_ERR){
-        perror("Error en la captura.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    pid=fork();
-    if(pid == -1){
-        perror("Error de fork");
-        exit(EXIT_FAILURE);
-    }
-
     for(i=0; i<50;i++){
-        printf("Iteracion %d\n", i);
+
+        f=fopen("ficheroe10.txt", "w");
+        fclose(f);
+
+        printf("Iteracion %d\n", i+1);
+
+        pid=fork();
+
+        if(pid == -1){
+            perror("Error de fork");
+            exit(EXIT_FAILURE);
+        }
+
         if(pid == 0){
             
-            f=fopen("ficheroe10.txt", "a");
-
+            
+            /*srand(getpid());*/
             while(1){
+                f=fopen("ficheroe10.txt", "w");
                 index=rand()%TAMANIO;
-                fprintf(f,"%s ",frase[index]);                
+                fprintf(f,"%s ",frase[index]);
+                printf("El hijo ha escrito %s\n", frase[index]);                
+                    
+
                 if(strcmp(frase[index], "FIN") == 0){
                     fclose(f);
-                    kill(getppid(),SIGUSR2);
                     exit(EXIT_SUCCESS);
                 }
-                alarm(5);
+                fclose(f);
             }
 
         }else{
+           
             
-            
-           pause();
-            
+           f=fopen("ficheroe10.txt", "r");           
+
+           do{
+
+            fscanf(f,"%s",aux);
+            printf("El padre ha leido: %s\n", aux);
+            sleep(5);
+           
+           } while(strcmp(aux,"FIN"));
+
+           fclose(f); 
 
         }
     }
@@ -94,6 +98,8 @@ int main(){
         perror("Error enviando senial");
         exit(EXIT_FAILURE);
     }
+
+    wait(NULL);
 
     exit(EXIT_SUCCESS);
 
