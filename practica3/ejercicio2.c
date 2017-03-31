@@ -10,7 +10,6 @@
 
 #define FILEKEY "/bin/cat" /*Util para ftok */
 #define KEY 1300
-#define MAXBUF 10
 
 typedef struct _info{
     char nombre[80];
@@ -21,41 +20,37 @@ typedef struct _info{
 void manejador_SIGUSR1(int sig);
 
 int main (int argc, char *argv[]) {
-    
-    char *buffer; /* shared buffer */
+
+    info* buffer; /* shared buffer */
     int id_zone, pid;
     int i, num, id;
-    char c;
     /* Key to shared memory */
     int key;
 
-    
+
     if(argc != 2){
         perror("Error en los argumentos de entrada");
         exit(EXIT_SUCCESS);
     }
+
     if(signal (SIGUSR1, manejador_SIGUSR1)==SIG_ERR){
-        perror("signal");
+        perror("Error  definiendo el manejador de senales");
         exit(EXIT_FAILURE);
-    } 
+    }
+
     num = atoi(argv[1]);
-    
+
     key = ftok(FILEKEY, KEY);
     if (key == -1) {
         fprintf (stderr, "Error with key \n");
         return -1;
     }
-    
-    id_zone = shmget(key, sizeof(info)*MAXBUF, IPC_CREAT | IPC_EXCL | SHM_R | SHM_W);
+
+    id_zone = shmget(key, sizeof(info), IPC_CREAT | IPC_EXCL | SHM_R | SHM_W);
     if( id_zone == -1){
         fprintf(stderr, "Error with id_zone \n");
+        exit(EXIT_FAILURE);
     }
-
-    buffer = shmat( id_zone, (char*) 0, 0);
-    if(buffer == NULL){
-        fprintf(stderr, "Error reserve shared memory \n");
-    }
-
 
     for (i=0, pid = 1; pid!=0 && i < num; i++){
         pid = fork();
@@ -66,21 +61,31 @@ int main (int argc, char *argv[]) {
             buffer = shmat( id_zone, (char*) 0, 0);
             if(buffer == NULL){
                 fprintf(stderr, "Error reserve shared memory \n");
+                exit(EXIT_FAILURE);
             }
             pause();
+            printf("Nombre de usuario: %s, ID: %d\n", buffer->nombre, buffer->id);
         }
         if(pid == 0){
-            srand(i);
-            sleep(rand());
-            printf("ALTA DE UN NUEVO CLIENTE:\n");
-            printf("Introduzca su nombre:");
-            scanf("%s", buffer);
-            id = atoi(buffer[80]);
-            id++;
-            buffer[81]=id;
+            id_zone = shmget(key, sizeof(info), 0);
+            if( id_zone == -1){
+                fprintf(stderr, "Error with id_zone \n");
+                exit(EXIT_FAILURE);
+            }
+            buffer = shmat( id_zone, (char*) 0, 0);
+            if(buffer == NULL){
+                fprintf(stderr, "Error reserve shared memory \n");
+                exit(EXIT_FAILURE);
+            }
+            srand(getpid());
+            sleep(rand()%10);
+            printf("ALTA DE UN NUEVO CLIENTE (Proceso %d). Introduzca su nombre:\n", getpid());
+            scanf("%s", buffer->nombre);
+            buffer->id++;
             kill(getppid(), SIGUSR1);
+            shmdt ((char *)buffer);
             exit(EXIT_SUCCESS);
-        }        
+        }
     }
     shmdt ((char *)buffer);
     shmctl (id_zone, IPC_RMID, (struct shmid_ds *)NULL);
@@ -88,7 +93,8 @@ int main (int argc, char *argv[]) {
 }
 
 void manejador_SIGUSR1(int sig){
-    
-    printf("\nNombre de usuario: %s, ID: %d", buffer, buffer[81]);
-          
+    if(signal (SIGUSR1, manejador_SIGUSR1)==SIG_ERR){
+        perror("Error en definiciendo el manejador de senales");
+        exit(EXIT_FAILURE);
+    }
 }
