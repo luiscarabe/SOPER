@@ -23,7 +23,7 @@ int main (int argc, char *argv[]) {
 
     info* buffer; /* shared buffer */
     int id_zone, pid;
-    int i, num, id;
+    int i, num;
     /* Key to shared memory */
     int key;
 
