@@ -1,6 +1,6 @@
 
 CC = gcc -g -Wall -pedantic
-EXE = ejercicio2 semaforos
+EXE = ejercicio2
 
 
 all : $(EXE)

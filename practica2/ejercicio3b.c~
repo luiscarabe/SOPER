@@ -16,6 +16,12 @@
 #include <sys/time.h>
 #include <math.h>
 
+/**
+* @brief Boolean (FALSE o TRUE)
+*
+* Esta estructura define un punto en dos dimensiones.
+*/
+
 typedef enum {FALSE=0, TRUE=1} Bool;
 
 /**
@@ -25,17 +31,7 @@ typedef enum {FALSE=0, TRUE=1} Bool;
 * @return TRUE en caso de que sea primo o FALSE en caso contrario
 */
 
-Bool es_primo(int p){
-    int i;
-    int s;
-    s = sqrt(p);
-    for (i = 2; i <= s; i++){
-        if ((p % i) == 0){
-            return FALSE;
-        }
-    }
-    return TRUE;
-}
+Bool es_primo(int p);
 
 /**
 * @brief Funcion que especifica el comportamiento de los hilos, en este caso, calcular los primeros N primos
@@ -44,23 +40,7 @@ Bool es_primo(int p){
 * @return void*
 */
 
-void* threadbehaviour(void* n){
-    int counter;
-    int *num, i;
-
-    num = (int*)n; 
-    counter = 0;
-
-    for(i=1; counter!=*num; i++){
-
-        if(es_primo(i)){
-            counter++;
-        }
-    }
-
-    pthread_exit(NULL);
-
-}
+void* threadbehaviour(void* n);
 
 /**
 * @brief Funcion main del programa
@@ -103,4 +83,34 @@ int main(int argc, char* argv[]){
 
     printf("El programa %s termino correctamente, con un tiempo de %f segundos.\n", argv[0], time);
     exit(EXIT_SUCCESS);
+}
+
+Bool es_primo(int p){
+    int i;
+    int s;
+    s = sqrt(p);
+    for (i = 2; i <= s; i++){
+        if ((p % i) == 0){
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
+void* threadbehaviour(void* n){
+    int counter;
+    int *num, i;
+
+    num = (int*)n; 
+    counter = 0;
+
+    for(i=1; counter!=*num; i++){
+
+        if(es_primo(i)){
+            counter++;
+        }
+    }
+
+    pthread_exit(NULL);
+
 }

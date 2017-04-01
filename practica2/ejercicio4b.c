@@ -13,8 +13,13 @@
 #include <sys/time.h>
 #include <math.h>
 
-/* Estructura para pasar datos a los threads. Se aniade un puntero a otra estructura para
-   que desde un hilo se pueda acceder a los datos que esta manejando el otr.*/
+
+/**
+* @brief Estructura de datos de un hilo
+*
+* Esta estructura define todos los datos que debe manejar un hilo. Se añade un puntero a otra estructura para
+* que desde un hilo se pueda acceder a los datos que esta manejando el otro.
+*/
 typedef struct _args{
     int dim;
     int** matriz;

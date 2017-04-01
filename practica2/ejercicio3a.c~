@@ -27,17 +27,7 @@ typedef enum {FALSE=0, TRUE=1} Bool;
 * @return TRUE en caso de que sea primo o FALSE en caso contrario
 */
 
-Bool es_primo(int p){
-    int i;
-    double s;
-    s = sqrt(p);
-    for (i = 2; i <= s; i++){
-        if ((p % i) == 0){
-            return FALSE;
-        }
-    }
-    return TRUE;
-} 
+Bool es_primo(int p);
 
 /**
 * @brief Funcion main del programa
@@ -98,3 +88,15 @@ int main(int argc , char *argv[]) {
 
     exit(EXIT_SUCCESS);
 }
+
+Bool es_primo(int p){
+    int i;
+    double s;
+    s = sqrt(p);
+    for (i = 2; i <= s; i++){
+        if ((p % i) == 0){
+            return FALSE;
+        }
+    }
+    return TRUE;
+} 

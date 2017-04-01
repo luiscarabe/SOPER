@@ -14,7 +14,12 @@
 #include <math.h>
 #include "time.h"
 
-/* Estructura para pasar datos al thread*/
+/**
+* @brief Estructura de datos de un hilo
+*
+* Esta estructura define todos los datos que debe manejar un hilo.
+*/
+
 typedef struct _args{
     int dim;
     int** matriz;

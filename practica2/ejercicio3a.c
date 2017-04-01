@@ -18,6 +18,11 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+/**
+* @brief Boolean (FALSE o TRUE)
+*
+*/
+
 typedef enum {FALSE=0, TRUE=1} Bool;
 
 /**
