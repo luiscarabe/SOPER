@@ -20,11 +20,11 @@ int Inicializar_Semaforo(int semid, unsigned short *array){
         return ERROR;
     }
     /*TRIPLEEEE??????????? DE hecho no sé si hace falta poner el n_sem, en el ejemplo lo pone*/
-    n_sem = sizeof(array)/sizeof(array[0]);
-    /*Por lo experimentado esto no funciona*/
+    /*n_sem = sizeof(array)/sizeof(array[0]);*/
+    /*Por lo experimentado esto no funciona, diria que con poner cualquier numero vale*/
 
     arg.array = array;
-    if(semctl (semid, n_sem, SETALL, arg)==-1){
+    if(semctl (semid, 1, SETALL, arg)==-1){
         return ERROR;
     }
     return OK;
