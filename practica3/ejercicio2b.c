@@ -7,7 +7,6 @@
 #include <sys/shm.h>
 #include <unistd.h>
 #include <signal.h>
-#include <sys/wait.h>
 
 #define FILEKEY "/bin/cat" /*Util para ftok */
 #define KEY 1300
@@ -20,11 +19,9 @@ typedef struct _info{
 
 void manejador_SIGUSR1(int sig);
 
-info* buffer; /* shared buffer */
-
 int main (int argc, char *argv[]) {
 
-
+    info* buffer; /* shared buffer */
     int id_zone, pid;
     int i, num;
     /* Key to shared memory */
@@ -66,6 +63,8 @@ int main (int argc, char *argv[]) {
                 fprintf(stderr, "Error reserve shared memory \n");
                 exit(EXIT_FAILURE);
             }
+            pause();
+            printf("Nombre de usuario: %s, ID: %d\n", buffer->nombre, buffer->id);
         }
         if(pid == 0){
             id_zone = shmget(key, sizeof(info), 0);
@@ -88,17 +87,12 @@ int main (int argc, char *argv[]) {
             exit(EXIT_SUCCESS);
         }
     }
-    for(i=0; i < num; i++){
-        wait(NULL);
-    }
     shmdt ((char *)buffer);
     shmctl (id_zone, IPC_RMID, (struct shmid_ds *)NULL);
     return 0;
 }
 
 void manejador_SIGUSR1(int sig){
-    printf("Nombre de usuario: %s, ID: %d\n", buffer->nombre, buffer->id);
-
     if(signal (SIGUSR1, manejador_SIGUSR1)==SIG_ERR){
         perror("Error en definiciendo el manejador de senales");
         exit(EXIT_FAILURE);

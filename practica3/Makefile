@@ -1,6 +1,6 @@
 
 CC = gcc -g -Wall -pedantic
-EXE = ejercicio2 ejercicio5
+EXE = ejercicio2 ejercicio2b ejercicio5
 
 
 all : $(EXE)
@@ -9,6 +9,11 @@ all : $(EXE)
 
 ejercicio2: ejercicio2.c
 	gcc -o $@ $^
+
+
+ejercicio2b: ejercicio2b.c
+	gcc -o $@ $^
+
 
 semaforos.o: semaforos.c
 	gcc -c $^
