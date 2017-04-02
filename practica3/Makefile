@@ -1,18 +1,20 @@
 
 CC = gcc -g -Wall -pedantic
-EXE = ejercicio2 semaforos
+EXE = ejercicio2 ejercicio5
 
 
 all : $(EXE)
 
 .PHONY : clean
 
-$(EXE) : % : %.c
-	@echo "#---------------------------"
-	@echo "# Generando $@ "
-	@echo "# Depende de $^"
-	@echo "# Ha cambiado $<"
-	$(CC) -o  $@ $@.c -lm -lpthread
+ejercicio2: ejercicio2.c
+	gcc -o $@ $^
+
+semaforos.o: semaforos.c
+	gcc -c $^
+
+ejercicio5: ejercicio5.c semaforos.o
+	gcc -o $@ $^
 
 
 clean :
