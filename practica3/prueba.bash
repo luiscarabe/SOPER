@@ -1,5 +1,5 @@
 #!/bin/bash 
-for i in `seq 1 1000`; do 
+for i in `seq 1 100`; do 
 ./ejercicio6
 echo "--------------------------"
 sleep 0.3

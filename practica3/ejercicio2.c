@@ -92,37 +92,28 @@ int main (int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
+    buffer = shmat( id_zone, (char*) 0, 0);
+    if(buffer == NULL){
+        fprintf(stderr, "Error reserve shared memory \n");
+        exit(EXIT_FAILURE);
+    }
+
     for (i=0, pid = 1; pid!=0 && i < num; i++){
         pid = fork();
         if(pid == -1){
             perror("Error realizando el fork");
         }
-        if(pid > 0){
-            buffer = shmat( id_zone, (char*) 0, 0);
-            if(buffer == NULL){
-                fprintf(stderr, "Error reserve shared memory \n");
-                exit(EXIT_FAILURE);
-            }
-        }
         if(pid == 0){
-            id_zone = shmget(key, sizeof(info), 0);
-            if( id_zone == -1){
-                fprintf(stderr, "Error with id_zone \n");
-                exit(EXIT_FAILURE);
-            }
-            buffer = shmat( id_zone, (char*) 0, 0);
-            if(buffer == NULL){
-                fprintf(stderr, "Error reserve shared memory \n");
-                exit(EXIT_FAILURE);
-            }
+
             srand(getpid());
-            sleep(rand()%20);
-            printf("ALTA DE UN NUEVO CLIENTE (Proceso %d). Introduzca su nombre:\n", getpid());
+            sleep(rand()%30);
+            printf("ALTA DE UN NUEVO CLIENTE (Proceso %d). Introduzca su nombre:\n",  getpid());
             scanf("%s", buffer->nombre);
             buffer->id++;
             kill(getppid(), SIGUSR1);
             shmdt ((char *)buffer);
             exit(EXIT_SUCCESS);
+
         }
     }
     for(i=0; i < num; i++){
