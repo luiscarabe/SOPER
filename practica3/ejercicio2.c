@@ -12,6 +12,7 @@
 #define FILEKEY "/bin/cat" /*Util para ftok */
 #define KEY 1300
 
+
 typedef struct _info{
     char nombre[80];
     int id;
