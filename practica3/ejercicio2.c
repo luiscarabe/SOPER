@@ -1,3 +1,17 @@
+/**
+* @brief Programa correspondiente al ejercicio 2 de la práctica 3 de Sistemas Operativos
+*
+* Este programa consiste en crear una zona de memoria que dos procesos distintos puedan compartir.
+* En este caso, uno de los procesos se encargará de obtener el nombre de una serie de clientes de
+* pantalla y generar un id distinto para cada uno de ellos mientras que el otro tendra que imprimir
+* tanto el nombre como el id por pantalla. Para compartir esta informacion se utiliza una estructura
+* en la region de memoria compartida.
+*
+* @file ejercicio2.c
+* @author Luis Carabe y Emilio Cuesta
+* @date 04-04-2017
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -13,16 +27,38 @@
 #define KEY 1300
 
 
+/**
+* @brief Estructura guardada en la region de memoria compartida.
+*
+* Esta estructura dispone de dos campos, una cadena de caracteres que almacena el nombre
+* de un cliente y un entero que seria su id.
+*/
 typedef struct _info{
     char nombre[80];
     int id;
 } info;
 
+/**
+* @brief Manejador definido para la senial SIGUSR1.
+*
+* Imprime el nombre y el id de un usuario por pantalla
+*/
+void manejador_SIGUSR1();
 
-void manejador_SIGUSR1(int sig);
 
-info* buffer; /* shared buffer */
+/*Variable global del tipo struct a la que tienen acceso los dos procesos.
+Se declara global para que en el codigo del manejador se pueda acceder a ella*/
+info* buffer;
 
+
+/**
+* @brief Funcion main del programa. Esta funcion crea una zona de memoria compartida,
+* posteriormente, realiza un fork. Desde el proceso hijo se solicita la informacion
+* de los nuevos clientes por pantalla. Desde el proceso padre, se imprime desde el
+* manejador esta informacion cuando se recibe la senial SIGUSR1 que envia el hijo
+* una vez recibida la informacion.
+* @param int n  Numero de usuarios que se van a introducir.
+*/
 int main (int argc, char *argv[]) {
 
 
@@ -97,7 +133,7 @@ int main (int argc, char *argv[]) {
     return 0;
 }
 
-void manejador_SIGUSR1(int sig){
+void manejador_SIGUSR1(){
     printf("Nombre de usuario: %s, ID: %d\n", buffer->nombre, buffer->id);
 
     if(signal (SIGUSR1, manejador_SIGUSR1)==SIG_ERR){

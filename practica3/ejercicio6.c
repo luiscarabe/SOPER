@@ -1,3 +1,17 @@
+/**
+* @brief Programa correspondiente al ejercicio 6 de la práctica 3 de Sistemas Operativos
+*
+* Este programa coordina el uso de memoria compartida y de semaforos para garantizar una
+* buena comunicacion entre ambos. Se trata de una representacion del clasico problema de
+* productor - consumidor. En este caso, el proceso productor generara en orden las letras
+* del abecedario y las ira almecenando en un array. Por su parte, el proceso hijo ira leyendo
+* dichas letras de cada posicion del array siempre y cuando ya hayan sido escritas.
+*
+* @file ejercicio6.c
+* @author Luis Carabe y Emilio Cuesta
+* @date 04-04-2017
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -14,14 +28,44 @@
 #define FILEKEY "/bin/cat" /*Util para ftok */
 #define KEY 1300
 
+
+/**
+* @brief Estructura guardada en la region de memoria compartida.
+*
+* Esta estructura dispone de un campo: una cadena de caracteres que va almacenando
+* progresivamente el alfabeto
+*/
 typedef struct _buffer{
   char alfb[26];
 } shm;
 
+
+/*
+* @brief Esta funcion simula el comportamiento del productor. Comprueba que la memoria
+* no esta siendo accedida por otro proceso, luego, guarda en el array la letra pertinente
+* y sale de la zona de memoria compartida. En el caso de ser la primera letra la que se
+* almacena, pone a 1 el semaforo que controla este aspecto.
+*/
 void productor();
+
+/*
+* @brief Esta funcion simula el comportamiento del consumidor. Comprueba que la memoria
+* no esta siendo accedida por otro proceso, luego, lee del array la letra pertinente,
+* la imprime por pantalla y sale de la zona de memoria compartida. En el caso de ser la
+* primera letra la que se lee, tendra que esperar a que el semaforo que controla esta
+* situacion se active.
+*/
 void consumidor();
 
-
+/*
+*@brief Funcion main del programa, crea una zona de memoria compartida y dos semaforos
+* para coordinar al productor y al consumidor. Uno de los semaforos servira para asegurarse
+* de que el consumidor no imprima antes de que el productor haya guardado una variable por
+* primera vez. El otro servira para evitar problemas de acceso simultaneo a la memoria compartida.
+* Posteriormente, realiza un fork(), el proceso padre toma la labor del consumidor y el proceso
+* hijo la del productor. Para esto, se utilizan las funciones productor() y consumidor() definidas
+* en este mismo fichero. Una vez se ha impreso todo el abecedario por pantalla, el programa finaliza.
+*/
 int main(){
     int pid;
     int key1, key2;
