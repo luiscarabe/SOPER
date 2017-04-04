@@ -143,42 +143,41 @@ int main(){
 void productor(shm* buffer, int semid){
     int i, flag = 0;
     for(i=65; i<=90; i++){
-        if(Down_Semaforo(semid, 1, SEM_UNDO) != OK){
+        if(Down_Semaforo(semid, 1, 0) != OK){
             fprintf(stderr, "Error en Down_Semaforo\n");
             return;
         }
         buffer->alfb[i] = (char) i;
-        if(Up_Semaforo(semid, 1, SEM_UNDO) != OK){
+        if(Up_Semaforo(semid, 1, 0) != OK){
             fprintf(stderr, "Error en Up_Semaforo\n");
             return;
         }
-        if(flag == 0){
-            if(Up_Semaforo(semid, 0, SEM_UNDO) != OK){
-                fprintf(stderr, "Error en Up_Semaforo\n");
-                return;
-            }
-            flag = 1;
+
+        if(Up_Semaforo(semid, 0, 0) != OK){
+            fprintf(stderr, "Error en Up_Semaforo\n");
+            return;
         }
+
+
     }
     return;
 }
 
 void consumidor(shm* buffer, int semid){
-    int i, flag = 0;
+    int i;
     for(i=65; i<=90; i++){
-        if(flag == 0){
-            if(Down_Semaforo(semid, 0, SEM_UNDO) != OK){
+
+        if(Down_Semaforo(semid, 0, 0) != OK){
                 fprintf(stderr, "Error en Down_Semaforo\n");
                 return;
-            }
-            flag = 1;
         }
-        if(Down_Semaforo(semid, 1, SEM_UNDO)!= OK){
+
+        if(Down_Semaforo(semid, 1, 0)!= OK){
             fprintf(stderr, "Error en Down_Semaforo\n");
             return;
         }
         fprintf(stdout, "Letra %d: %c\n", i-64, buffer->alfb[i]);
-        if(Up_Semaforo(semid, 1 ,SEM_UNDO) != OK){
+        if(Up_Semaforo(semid, 1 ,0) != OK){
             fprintf(stderr, "Error en Up_Semaforo\n");
             return;
         }
