@@ -1,3 +1,14 @@
+/**
+* @brief Programa correspondiente al ejercicio 4 de la práctica 3 de Sistemas Operativos
+*
+* En este fichero implementamos la librería semáforos.h, que nos dará las funciones básicas para manipular 
+* semáforos.
+*
+* @file semaforos.c
+* @author Luis Carabe y Emilio Cuesta
+* @date 05-04-2017
+*/
+
 #include <stdio.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
@@ -7,6 +18,12 @@
 #include <sys/shm.h>
 #include "semaforos.h"
 
+/**
+* @brief Funcion que inicializa los semaforos indicados
+* @param int semid: identificador del semaforo
+* @param unsigned short* array: valores iniciales del semaforo
+* @return OK si todo fue correcto, ERROR en caso de error
+*/
 
 int Inicializar_Semaforo(int semid, unsigned short *array){
     int n_sem;
@@ -19,23 +36,36 @@ int Inicializar_Semaforo(int semid, unsigned short *array){
     if(semid < 0){
         return ERROR;
     }
-    /*TRIPLEEEE??????????? DE hecho no sé si hace falta poner el n_sem, en el ejemplo lo pone*/
-    /*n_sem = sizeof(array)/sizeof(array[0]);*/
-    /*Por lo experimentado esto no funciona, diria que con poner cualquier numero vale*/
 
     arg.array = array;
+    /*Inicializamos los valores*/
     if(semctl (semid, 1, SETALL, arg)==-1){
         return ERROR;
     }
     return OK;
 }
-
+/**
+* @brief Funcion que borra un semaforo
+* @param int semid: identificador del semaforo a eliminar
+* @return OK si todo fue correcto, ERROR en caso de error
+*/
+ 
 int Borrar_Semaforo(int semid){
+    if(semid < 0){
+        return ERROR;
+    }    
     if(semctl (semid,0, IPC_RMID, 0) == -1){
         return ERROR;
     }
     return OK;
 }
+/**
+* @brief Funcion que crea un semaforo(inicializándolo a 0) con la clave y el tamaño especificado.
+* @param key_t key: clave precompartida del semaforo
+* @param int *semid: identificador del semaforo
+* @param int size: tamaño del semaforo
+* @return ERROR en caso de error, 0 si ha creado el semáforo o 1 si ya estaba creado
+*/
 
 int Crear_Semaforo(key_t key, int size, int *semid){
     int i;
@@ -74,6 +104,14 @@ int Crear_Semaforo(key_t key, int size, int *semid){
     return 0;
 }
 
+/**
+* @brief baja el semaforo indicado  
+* @param int id: identificador del semaforo. 
+* @param int num_sem: semaforo dentro del array. 
+* @param int undo: flag de modo persistente pese a finalización abrupta.
+* @return OK si todo fue correcto, ERROR en caso de error.
+*/
+
 int Down_Semaforo(int id, int num_sem, int undo){
     struct sembuf sem_oper;
     if(id < 0 || num_sem < 0){
@@ -88,6 +126,15 @@ int Down_Semaforo(int id, int num_sem, int undo){
     return OK;
 }
 
+/**
+* @brief baja todos los semaforos del array pasado como argumento
+* @param int id: identificador del semaforo. 
+* @param int size: numero de semaforos del array. 
+* @param int undo: flag de modo persistente pese a finalización abrupta.
+* @param int *active: semaforos involucrados
+* @return OK si todo fue correcto, ERROR en caso de error.
+*/
+
 int DownMultiple_Semaforo(int id,int size,int undo, int *active){
     struct sembuf sem_oper;
     int i, tam;
@@ -96,24 +143,24 @@ int DownMultiple_Semaforo(int id,int size,int undo, int *active){
     }
     sem_oper.sem_op = -1;
     sem_oper.sem_flg = undo;
-    /*Creo que no podemos tomar el size como el size de active*/
+    /*Realizamos el down pasando por todos los semáforos del array*/
     for(i = 0; i < size; i++){
         sem_oper.sem_num = active[i];
         if(semop (id, &sem_oper, 1) == -1){
             return ERROR;
         }
     }
-    /*tam = sizeof(active)/sizeof(active[0]);
-
-    for(i = 0; i < tam; i++){
-        sem_oper.sem_num = active[i];
-        if(semop (id, &sem_oper, 1) == -1){
-            return ERROR;
-        }
-    }*/
 
     return OK;
 }
+
+/**
+* @brief sube el semaforo indicado  
+* @param int id: identificador del semaforo. 
+* @param int num_sem: semaforo dentro del array. 
+* @param int undo: flag de modo persistente pese a finalización abrupta.
+* @return OK si todo fue correcto, ERROR en caso de error.
+*/
 
 int Up_Semaforo(int id, int num_sem, int undo){
     struct sembuf sem_oper;
@@ -128,6 +175,14 @@ int Up_Semaforo(int id, int num_sem, int undo){
     }
     return OK;
 }
+/**
+* @brief sube todos los semaforos del array pasado como argumento
+* @param int id: identificador del semaforo. 
+* @param int size: numero de semaforos del array. 
+* @param int undo: flag de modo persistente pese a finalización abrupta.
+* @param int *active: semaforos involucrados
+* @return OK si todo fue correcto, ERROR en caso de error.
+*/
 
 int UpMultiple_Semaforo(int id,int size, int undo, int *active){
     struct sembuf sem_oper;
@@ -138,7 +193,7 @@ int UpMultiple_Semaforo(int id,int size, int undo, int *active){
     sem_oper.sem_op = 1;
     sem_oper.sem_flg = undo;
 
-    /*Creo que no podemos tomar el size como el size de active, aun asi lo tuyo creo que funsiona*/
+    /*Realizamos el up pasando por todos los semáforos del array*/
     for(i = 0; i < size; i++){
         sem_oper.sem_num = active[i];
         if(semop (id, &sem_oper, 1) == -1){
@@ -146,15 +201,6 @@ int UpMultiple_Semaforo(int id,int size, int undo, int *active){
         }
     }
 
-    /*tam = sizeof(active)/sizeof(active[0]); shitt*/
-    /*fprintf(stdout, "active %d laotrasize %d tam %d\n",sizeof(active), sizeof(active[0]), tam);*/
-    i=0;
-    while(active[i])
-    for(i = 0; i < tam; i++){
-        sem_oper.sem_num = active[i];
-        if(semop (id, &sem_oper, 1) == -1){
-            return ERROR;
-        }
-    }
+
     return OK;
 }

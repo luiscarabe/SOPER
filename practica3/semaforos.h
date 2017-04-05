@@ -1,3 +1,12 @@
+/**
+* @brief Programa correspondiente al ejercicio 4 de la práctica 3 de Sistemas Operativos
+*
+* En este .h tenemos la declaración de todos los métodos a implementar en semaforos.c
+*
+* @file semaforos.h
+* @author Luis Carabe y Emilio Cuesta
+* @date 05-04-2017
+*/
 
 #ifndef SEMAFOROS_H
    #define SEMAFOROS_H
@@ -46,7 +55,7 @@ int Crear_Semaforo(key_t key, int size, int *semid);
      Nombre:Down_Semaforo 
      Descripcion: Baja el semaforo indicado 
      Entrada: 
-        int semid: Identificador del semaforo. 
+        int id: Identificador del semaforo. 
         int num_sem: Semaforo dentro del array. 
         int undo: Flag de modo persistente pese a finalización abrupta. 
      Salida: 
@@ -58,7 +67,7 @@ int Down_Semaforo(int id, int num_sem, int undo);
      Nombre: DownMultiple_Semaforo 
      Descripcion: Baja todos los semaforos del array indicado por active. 
      Entrada: 
-        int semid: Identificador del semaforo. 
+        int id: Identificador del semaforo. 
         int size: Numero de semaforos del array. 
         int undo: Flag de modo persistente pese a finalización abrupta. 
         int *active: Semaforos involucrados. 
@@ -71,7 +80,7 @@ int DownMultiple_Semaforo(int id,int size,int undo, int *active);
      Nombre:Up_Semaforo 
      Descripcion: Sube el semaforo indicado 
      Entrada: 
-        int semid: Identificador del semaforo. 
+        int id: Identificador del semaforo. 
         int num_sem: Semaforo dentro del array. 
         int undo: Flag de modo persistente pese a finalizacion  abupta. 
      Salida: 
@@ -83,7 +92,7 @@ int Up_Semaforo(int id, int num_sem, int undo);
      Nombre: UpMultiple_Semaforo 
      Descripcion: Sube todos los semaforos del array indicado por active. 
      Entrada: 
-        int semid: Identificador del semaforo. 
+        int id: Identificador del semaforo. 
         int size: Numero de semaforos del array. 
         int undo: Flag de modo persistente pese a finalización  abrupta. 
         int *active: Semaforos involucrados. 
