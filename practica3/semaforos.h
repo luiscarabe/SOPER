@@ -12,6 +12,10 @@
    #define SEMAFOROS_H
 #include <stdio.h>
 
+/**
+* @brief enumeracion que nos da el valor de ERROR (-1) u OK (0)
+*/
+
 typedef enum _Status {ERROR = -1, OK = 0} Status;
 
 /*************************************************************** 

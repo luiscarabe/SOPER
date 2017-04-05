@@ -92,7 +92,7 @@ int Up_Semaforo(int id, int num_sem, int undo);
      Nombre: UpMultiple_Semaforo 
      Descripcion: Sube todos los semaforos del array indicado por active. 
      Entrada: 
-        int semid: Identificador del semaforo. 
+        int id: Identificador del semaforo. 
         int size: Numero de semaforos del array. 
         int undo: Flag de modo persistente pese a finalización  abrupta. 
         int *active: Semaforos involucrados. 

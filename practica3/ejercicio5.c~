@@ -270,15 +270,11 @@ int ejercicio2Sem(int num){
         return -1;
     }
 
-    /*Armamos el manejador de la señal SIGUSR1*/
-
     if(signal (SIGUSR1, manejador_SIGUSR1)==SIG_ERR){
         perror("Error  definiendo el manejador de senales");
         free(init);
         exit(EXIT_FAILURE);
     }
-
-    /*Creamos la zona de memoria compartida*/
 
     key = ftok(FILEKEY, KEY);
     if (key == -1) {
@@ -328,8 +324,6 @@ int ejercicio2Sem(int num){
     for(i=0; i < num; i++){
         wait(NULL);
     }
-    
-    /*Liberamos recursos*/
 
     if(Borrar_Semaforo(semid) == ERROR){
         fprintf(stderr, "Error en Borrar_Semaforo");
