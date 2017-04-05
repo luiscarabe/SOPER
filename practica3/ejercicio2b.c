@@ -22,6 +22,8 @@
 #include <sys/shm.h>
 #include <unistd.h>
 #include <signal.h>
+#include <sys/wait.h>
+
 
 #define FILEKEY "/bin/cat" /*Util para ftok */
 #define KEY 1300
@@ -57,10 +59,9 @@ void manejador_SIGUSR1();
 */
 int main (int argc, char *argv[]) {
 
-    info* buffer; /* shared buffer */
+    info* buffer; 
     int id_zone, pid;
     int i, num;
-    /* Key to shared memory */
     int key;
 
 
@@ -104,7 +105,7 @@ int main (int argc, char *argv[]) {
         }
         if(pid == 0){
             srand(getpid());
-            sleep(rand()%20);
+            sleep(rand()%10);
             printf("ALTA DE UN NUEVO CLIENTE (Proceso %d). Introduzca su nombre:\n", getpid());
             scanf("%s", buffer->nombre);
             buffer->id++;
@@ -113,6 +114,8 @@ int main (int argc, char *argv[]) {
             exit(EXIT_SUCCESS);
         }
     }
+
+    wait(NULL);
     shmdt ((char *)buffer);
     shmctl (id_zone, IPC_RMID, (struct shmid_ds *)NULL);
     return 0;

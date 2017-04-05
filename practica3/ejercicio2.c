@@ -61,10 +61,8 @@ info* buffer;
 */
 int main (int argc, char *argv[]) {
 
-
     int id_zone, pid;
     int i, num;
-    /* Key to shared memory */
     int key;
 
 

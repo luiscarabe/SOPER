@@ -48,7 +48,7 @@ typedef struct _buffer{
 * incrementa el valor del segundo semaforo utilizado para que el proceso consumidor
 * sepa que ya tiene algo que leer.
 */
-void productor();
+void productor(shm* buffer, int semid);
 
 /*
 * @brief Esta funcion simula el comportamiento del consumidor. Comprueba que la memoria
@@ -56,8 +56,10 @@ void productor();
 * la letra pertinente, la imprime por pantalla y sale de la zona de memoria compartida. En
 * todo momento, si el consumidor ya ha leido todo lo que el padre ha producido, este proceso
 * estará bloqueado.
+* @param shm* buffer Puntero a la estructura del tipo shm que hace de memoria compartida.
+* @param int semid Identificador del set de semaforos a utilizar.
 */
-void consumidor();
+void consumidor(shm* buffer, int semid);
 
 /*
 *@brief Funcion main del programa, crea una zona de memoria compartida y dos semaforos
@@ -68,15 +70,15 @@ void consumidor();
 * Son sus dos hijos los que realizan estas labores para que la ejecucion sea paralela.
 * Para esto, se utilizan las funciones productor() y consumidor() definidas en este mismo fichero.
 * Una vez se ha creado, leido e impreso todo el abecedario por pantalla, el programa finaliza.
+* @param shm* buffer Puntero a la estructura del tipo shm que hace de memoria compartida.
+* @param int semid Identificador del set de semaforos a utilizar.
 */
 int main(){
-    int pid;
-    int i;
+    int pid,  id_zone, semid;
     int key1, key2;
-    int id_zone;
-    shm* buffer;
-    int semid;
+    int i;
     unsigned short init[2];
+    shm* buffer;
 
     key1 = ftok(FILEKEY, KEY);
     if (key1 == -1) {
