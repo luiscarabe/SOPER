@@ -1,0 +1,219 @@
+\hypertarget{semaforos_8c}{\section{semaforos.\-c File Reference}
+\label{semaforos_8c}\index{semaforos.\-c@{semaforos.\-c}}
+}
+
+
+Programa correspondiente al ejercicio 4 de la práctica 3 de Sistemas Operativos.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$sys/ipc.\-h$>$}\\*
+{\ttfamily \#include $<$sys/sem.\-h$>$}\\*
+{\ttfamily \#include $<$sys/types.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$errno.\-h$>$}\\*
+{\ttfamily \#include $<$sys/shm.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}semaforos.\-h\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{semaforos_8c_a4af104b0ed37e6ae0289a1059bc6e990}{Inicializar\-\_\-\-Semaforo} (int semid, unsigned short $\ast$array)
+\begin{DoxyCompactList}\small\item\em Funcion que inicializa los semaforos indicados. \end{DoxyCompactList}\item 
+int \hyperlink{semaforos_8c_a731339337960a681efa435a10f12c312}{Borrar\-\_\-\-Semaforo} (int semid)
+\begin{DoxyCompactList}\small\item\em Funcion que borra un semaforo. \end{DoxyCompactList}\item 
+int \hyperlink{semaforos_8c_a16b16dd895b5f4cbe48f1ac8977e8b35}{Crear\-\_\-\-Semaforo} (key\-\_\-t key, int size, int $\ast$semid)
+\begin{DoxyCompactList}\small\item\em Funcion que crea un semaforo(inicializándolo a 0) con la clave y el tamaño especificado. \end{DoxyCompactList}\item 
+int \hyperlink{semaforos_8c_a883244cd3b83c42cda23687da1b63369}{Down\-\_\-\-Semaforo} (int id, int num\-\_\-sem, int undo)
+\begin{DoxyCompactList}\small\item\em baja el semaforo indicado \end{DoxyCompactList}\item 
+int \hyperlink{semaforos_8c_ab375ebfc38acbdced46e062a689d5fad}{Down\-Multiple\-\_\-\-Semaforo} (int id, int size, int undo, int $\ast$active)
+\begin{DoxyCompactList}\small\item\em baja todos los semaforos del array pasado como argumento \end{DoxyCompactList}\item 
+int \hyperlink{semaforos_8c_a2d5e735aecee4f493898b3d4ebab1a10}{Up\-\_\-\-Semaforo} (int id, int num\-\_\-sem, int undo)
+\begin{DoxyCompactList}\small\item\em sube el semaforo indicado \end{DoxyCompactList}\item 
+int \hyperlink{semaforos_8c_a943759695f018d64a94b8a2c49308092}{Up\-Multiple\-\_\-\-Semaforo} (int id, int size, int undo, int $\ast$active)
+\begin{DoxyCompactList}\small\item\em sube todos los semaforos del array pasado como argumento \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Programa correspondiente al ejercicio 4 de la práctica 3 de Sistemas Operativos. En este fichero implementamos la librería semáforos.\-h, que nos dará las funciones básicas para manipular semáforos.
+
+\begin{DoxyAuthor}{Author}
+Luis Carabe y Emilio Cuesta 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+05-\/04-\/2017 
+\end{DoxyDate}
+
+
+\subsection{Function Documentation}
+\hypertarget{semaforos_8c_a731339337960a681efa435a10f12c312}{\index{semaforos.\-c@{semaforos.\-c}!Borrar\-\_\-\-Semaforo@{Borrar\-\_\-\-Semaforo}}
+\index{Borrar\-\_\-\-Semaforo@{Borrar\-\_\-\-Semaforo}!semaforos.c@{semaforos.\-c}}
+\subsubsection[{Borrar\-\_\-\-Semaforo}]{\setlength{\rightskip}{0pt plus 5cm}int Borrar\-\_\-\-Semaforo (
+\begin{DoxyParamCaption}
+\item[{int}]{semid}
+\end{DoxyParamCaption}
+)}}\label{semaforos_8c_a731339337960a681efa435a10f12c312}
+
+
+Funcion que borra un semaforo. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & semid\-: identificador del semaforo a eliminar \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+O\-K si todo fue correcto, E\-R\-R\-O\-R en caso de error 
+\end{DoxyReturn}
+\hypertarget{semaforos_8c_a16b16dd895b5f4cbe48f1ac8977e8b35}{\index{semaforos.\-c@{semaforos.\-c}!Crear\-\_\-\-Semaforo@{Crear\-\_\-\-Semaforo}}
+\index{Crear\-\_\-\-Semaforo@{Crear\-\_\-\-Semaforo}!semaforos.c@{semaforos.\-c}}
+\subsubsection[{Crear\-\_\-\-Semaforo}]{\setlength{\rightskip}{0pt plus 5cm}int Crear\-\_\-\-Semaforo (
+\begin{DoxyParamCaption}
+\item[{key\-\_\-t}]{key, }
+\item[{int}]{size, }
+\item[{int $\ast$}]{semid}
+\end{DoxyParamCaption}
+)}}\label{semaforos_8c_a16b16dd895b5f4cbe48f1ac8977e8b35}
+
+
+Funcion que crea un semaforo(inicializándolo a 0) con la clave y el tamaño especificado. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key\-\_\-t} & key\-: clave precompartida del semaforo \\
+\hline
+{\em int} & $\ast$semid\-: identificador del semaforo \\
+\hline
+{\em int} & size\-: tamaño del semaforo \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+E\-R\-R\-O\-R en caso de error, 0 si ha creado el semáforo o 1 si ya estaba creado 
+\end{DoxyReturn}
+\hypertarget{semaforos_8c_a883244cd3b83c42cda23687da1b63369}{\index{semaforos.\-c@{semaforos.\-c}!Down\-\_\-\-Semaforo@{Down\-\_\-\-Semaforo}}
+\index{Down\-\_\-\-Semaforo@{Down\-\_\-\-Semaforo}!semaforos.c@{semaforos.\-c}}
+\subsubsection[{Down\-\_\-\-Semaforo}]{\setlength{\rightskip}{0pt plus 5cm}int Down\-\_\-\-Semaforo (
+\begin{DoxyParamCaption}
+\item[{int}]{id, }
+\item[{int}]{num\-\_\-sem, }
+\item[{int}]{undo}
+\end{DoxyParamCaption}
+)}}\label{semaforos_8c_a883244cd3b83c42cda23687da1b63369}
+
+
+baja el semaforo indicado 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & id\-: identificador del semaforo. \\
+\hline
+{\em int} & num\-\_\-sem\-: semaforo dentro del array. \\
+\hline
+{\em int} & undo\-: flag de modo persistente pese a finalización abrupta. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+O\-K si todo fue correcto, E\-R\-R\-O\-R en caso de error. 
+\end{DoxyReturn}
+\hypertarget{semaforos_8c_ab375ebfc38acbdced46e062a689d5fad}{\index{semaforos.\-c@{semaforos.\-c}!Down\-Multiple\-\_\-\-Semaforo@{Down\-Multiple\-\_\-\-Semaforo}}
+\index{Down\-Multiple\-\_\-\-Semaforo@{Down\-Multiple\-\_\-\-Semaforo}!semaforos.c@{semaforos.\-c}}
+\subsubsection[{Down\-Multiple\-\_\-\-Semaforo}]{\setlength{\rightskip}{0pt plus 5cm}int Down\-Multiple\-\_\-\-Semaforo (
+\begin{DoxyParamCaption}
+\item[{int}]{id, }
+\item[{int}]{size, }
+\item[{int}]{undo, }
+\item[{int $\ast$}]{active}
+\end{DoxyParamCaption}
+)}}\label{semaforos_8c_ab375ebfc38acbdced46e062a689d5fad}
+
+
+baja todos los semaforos del array pasado como argumento 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & id\-: identificador del semaforo. \\
+\hline
+{\em int} & size\-: numero de semaforos del array. \\
+\hline
+{\em int} & undo\-: flag de modo persistente pese a finalización abrupta. \\
+\hline
+{\em int} & $\ast$active\-: semaforos involucrados \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+O\-K si todo fue correcto, E\-R\-R\-O\-R en caso de error. 
+\end{DoxyReturn}
+\hypertarget{semaforos_8c_a4af104b0ed37e6ae0289a1059bc6e990}{\index{semaforos.\-c@{semaforos.\-c}!Inicializar\-\_\-\-Semaforo@{Inicializar\-\_\-\-Semaforo}}
+\index{Inicializar\-\_\-\-Semaforo@{Inicializar\-\_\-\-Semaforo}!semaforos.c@{semaforos.\-c}}
+\subsubsection[{Inicializar\-\_\-\-Semaforo}]{\setlength{\rightskip}{0pt plus 5cm}int Inicializar\-\_\-\-Semaforo (
+\begin{DoxyParamCaption}
+\item[{int}]{semid, }
+\item[{unsigned short $\ast$}]{array}
+\end{DoxyParamCaption}
+)}}\label{semaforos_8c_a4af104b0ed37e6ae0289a1059bc6e990}
+
+
+Funcion que inicializa los semaforos indicados. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & semid\-: identificador del semaforo \\
+\hline
+{\em unsigned} & short$\ast$ array\-: valores iniciales del semaforo \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+O\-K si todo fue correcto, E\-R\-R\-O\-R en caso de error 
+\end{DoxyReturn}
+\hypertarget{semaforos_8c_a2d5e735aecee4f493898b3d4ebab1a10}{\index{semaforos.\-c@{semaforos.\-c}!Up\-\_\-\-Semaforo@{Up\-\_\-\-Semaforo}}
+\index{Up\-\_\-\-Semaforo@{Up\-\_\-\-Semaforo}!semaforos.c@{semaforos.\-c}}
+\subsubsection[{Up\-\_\-\-Semaforo}]{\setlength{\rightskip}{0pt plus 5cm}int Up\-\_\-\-Semaforo (
+\begin{DoxyParamCaption}
+\item[{int}]{id, }
+\item[{int}]{num\-\_\-sem, }
+\item[{int}]{undo}
+\end{DoxyParamCaption}
+)}}\label{semaforos_8c_a2d5e735aecee4f493898b3d4ebab1a10}
+
+
+sube el semaforo indicado 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & id\-: identificador del semaforo. \\
+\hline
+{\em int} & num\-\_\-sem\-: semaforo dentro del array. \\
+\hline
+{\em int} & undo\-: flag de modo persistente pese a finalización abrupta. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+O\-K si todo fue correcto, E\-R\-R\-O\-R en caso de error. 
+\end{DoxyReturn}
+\hypertarget{semaforos_8c_a943759695f018d64a94b8a2c49308092}{\index{semaforos.\-c@{semaforos.\-c}!Up\-Multiple\-\_\-\-Semaforo@{Up\-Multiple\-\_\-\-Semaforo}}
+\index{Up\-Multiple\-\_\-\-Semaforo@{Up\-Multiple\-\_\-\-Semaforo}!semaforos.c@{semaforos.\-c}}
+\subsubsection[{Up\-Multiple\-\_\-\-Semaforo}]{\setlength{\rightskip}{0pt plus 5cm}int Up\-Multiple\-\_\-\-Semaforo (
+\begin{DoxyParamCaption}
+\item[{int}]{id, }
+\item[{int}]{size, }
+\item[{int}]{undo, }
+\item[{int $\ast$}]{active}
+\end{DoxyParamCaption}
+)}}\label{semaforos_8c_a943759695f018d64a94b8a2c49308092}
+
+
+sube todos los semaforos del array pasado como argumento 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & id\-: identificador del semaforo. \\
+\hline
+{\em int} & size\-: numero de semaforos del array. \\
+\hline
+{\em int} & undo\-: flag de modo persistente pese a finalización abrupta. \\
+\hline
+{\em int} & $\ast$active\-: semaforos involucrados \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+O\-K si todo fue correcto, E\-R\-R\-O\-R en caso de error. 
+\end{DoxyReturn}

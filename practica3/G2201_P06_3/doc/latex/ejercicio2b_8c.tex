@@ -1,0 +1,100 @@
+\hypertarget{ejercicio2b_8c}{\section{ejercicio2b.\-c File Reference}
+\label{ejercicio2b_8c}\index{ejercicio2b.\-c@{ejercicio2b.\-c}}
+}
+
+
+Programa correspondiente al ejercicio 2 de la práctica 3 de Sistemas Operativos. este programa presenta una mejora con respecto al presente en el fichero \hyperlink{ejercicio2_8c}{ejercicio2.\-c}.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$sys/types.\-h$>$}\\*
+{\ttfamily \#include $<$sys/ipc.\-h$>$}\\*
+{\ttfamily \#include $<$string.\-h$>$}\\*
+{\ttfamily \#include $<$errno.\-h$>$}\\*
+{\ttfamily \#include $<$sys/shm.\-h$>$}\\*
+{\ttfamily \#include $<$unistd.\-h$>$}\\*
+{\ttfamily \#include $<$signal.\-h$>$}\\*
+{\ttfamily \#include $<$sys/wait.\-h$>$}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct__info}{\-\_\-info}
+\begin{DoxyCompactList}\small\item\em Estructura guardada en la region de memoria compartida. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{ejercicio2b_8c_a68c15c5fb7f7c6f707903e6a46ab0557}{\#define {\bfseries F\-I\-L\-E\-K\-E\-Y}~\char`\"{}/bin/cat\char`\"{} /$\ast$Util para ftok $\ast$/}\label{ejercicio2b_8c_a68c15c5fb7f7c6f707903e6a46ab0557}
+
+\item 
+\hypertarget{ejercicio2b_8c_a8ae9d53f33f46cfcfcb9736e6351452a}{\#define {\bfseries K\-E\-Y}~1300}\label{ejercicio2b_8c_a8ae9d53f33f46cfcfcb9736e6351452a}
+
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{struct__info}{\-\_\-info} \hyperlink{ejercicio2b_8c_adc60ad5b4dd36c641c415957426138f1}{info}
+\begin{DoxyCompactList}\small\item\em Estructura guardada en la region de memoria compartida. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{ejercicio2b_8c_a2e45778cce03737c78a651db3863480c}{manejador\-\_\-\-S\-I\-G\-U\-S\-R1} ()
+\begin{DoxyCompactList}\small\item\em Manejador definido para la senial S\-I\-G\-U\-S\-R1. \end{DoxyCompactList}\item 
+int \hyperlink{ejercicio2b_8c_a0ddf1224851353fc92bfbff6f499fa97}{main} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Funcion main del programa. Esta funcion crea una zona de memoria compartida, posteriormente, realiza un fork. Desde el proceso hijo se solicita la informacion de los nuevos clientes por pantalla. Desde el proceso padre, se imprime esta informacion cuando se recibe la senial S\-I\-G\-U\-S\-R1 que envia el hijo una vez recibida la informacion. Sin embargo, en este caso no se imprime desde el manejador, si no que se pausa el proceso padre hasta que recibe una senial. El resultado es mucho mas ordenado. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Programa correspondiente al ejercicio 2 de la práctica 3 de Sistemas Operativos. este programa presenta una mejora con respecto al presente en el fichero \hyperlink{ejercicio2_8c}{ejercicio2.\-c}. Este programa consiste en crear una zona de memoria que dos procesos distintos puedan compartir. En este caso, uno de los procesos se encargará de obtener el nombre de una serie de clientes de pantalla y generar un id distinto para cada uno de ellos mientras que el otro tendra que imprimir tanto el nombre como el id por pantalla. Para compartir esta informacion se utiliza una estructura en la region de memoria compartida.
+
+\begin{DoxyAuthor}{Author}
+Luis Carabe y Emilio Cuesta 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+04-\/04-\/2017 
+\end{DoxyDate}
+
+
+\subsection{Typedef Documentation}
+\hypertarget{ejercicio2b_8c_adc60ad5b4dd36c641c415957426138f1}{\index{ejercicio2b.\-c@{ejercicio2b.\-c}!info@{info}}
+\index{info@{info}!ejercicio2b.c@{ejercicio2b.\-c}}
+\subsubsection[{info}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \-\_\-info}  {\bf info}}}\label{ejercicio2b_8c_adc60ad5b4dd36c641c415957426138f1}
+
+
+Estructura guardada en la region de memoria compartida. 
+
+Esta estructura dispone de dos campos, una cadena de caracteres que almacena el nombre de un cliente y un entero que seria su id. 
+
+\subsection{Function Documentation}
+\hypertarget{ejercicio2b_8c_a0ddf1224851353fc92bfbff6f499fa97}{\index{ejercicio2b.\-c@{ejercicio2b.\-c}!main@{main}}
+\index{main@{main}!ejercicio2b.c@{ejercicio2b.\-c}}
+\subsubsection[{main}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+\item[{int}]{argc, }
+\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}}\label{ejercicio2b_8c_a0ddf1224851353fc92bfbff6f499fa97}
+
+
+Funcion main del programa. Esta funcion crea una zona de memoria compartida, posteriormente, realiza un fork. Desde el proceso hijo se solicita la informacion de los nuevos clientes por pantalla. Desde el proceso padre, se imprime esta informacion cuando se recibe la senial S\-I\-G\-U\-S\-R1 que envia el hijo una vez recibida la informacion. Sin embargo, en este caso no se imprime desde el manejador, si no que se pausa el proceso padre hasta que recibe una senial. El resultado es mucho mas ordenado. 
+
+
+\begin{DoxyItemize}
+\item 
+\begin{DoxyParams}{Parameters}
+{\em int} & n Numero de usuarios que se van a introducir. \\
+\hline
+\end{DoxyParams}
+
+\end{DoxyItemize}\hypertarget{ejercicio2b_8c_a2e45778cce03737c78a651db3863480c}{\index{ejercicio2b.\-c@{ejercicio2b.\-c}!manejador\-\_\-\-S\-I\-G\-U\-S\-R1@{manejador\-\_\-\-S\-I\-G\-U\-S\-R1}}
+\index{manejador\-\_\-\-S\-I\-G\-U\-S\-R1@{manejador\-\_\-\-S\-I\-G\-U\-S\-R1}!ejercicio2b.c@{ejercicio2b.\-c}}
+\subsubsection[{manejador\-\_\-\-S\-I\-G\-U\-S\-R1}]{\setlength{\rightskip}{0pt plus 5cm}void manejador\-\_\-\-S\-I\-G\-U\-S\-R1 (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{ejercicio2b_8c_a2e45778cce03737c78a651db3863480c}
+
+
+Manejador definido para la senial S\-I\-G\-U\-S\-R1. 
+
+Imprime el nombre y el id de un usuario por pantalla 

@@ -1,0 +1,73 @@
+\hypertarget{ejercicio6_8c}{\section{ejercicio6.\-c File Reference}
+\label{ejercicio6_8c}\index{ejercicio6.\-c@{ejercicio6.\-c}}
+}
+
+
+Programa correspondiente al ejercicio 6 de la práctica 3 de Sistemas Operativos.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$sys/types.\-h$>$}\\*
+{\ttfamily \#include $<$sys/ipc.\-h$>$}\\*
+{\ttfamily \#include $<$sys/sem.\-h$>$}\\*
+{\ttfamily \#include $<$string.\-h$>$}\\*
+{\ttfamily \#include $<$errno.\-h$>$}\\*
+{\ttfamily \#include $<$sys/shm.\-h$>$}\\*
+{\ttfamily \#include $<$unistd.\-h$>$}\\*
+{\ttfamily \#include $<$signal.\-h$>$}\\*
+{\ttfamily \#include $<$sys/wait.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}semaforos.\-h\char`\"{}}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct__buffer}{\-\_\-buffer}
+\begin{DoxyCompactList}\small\item\em Estructura guardada en la region de memoria compartida. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{ejercicio6_8c_a68c15c5fb7f7c6f707903e6a46ab0557}{\#define {\bfseries F\-I\-L\-E\-K\-E\-Y}~\char`\"{}/bin/cat\char`\"{} /$\ast$Util para ftok $\ast$/}\label{ejercicio6_8c_a68c15c5fb7f7c6f707903e6a46ab0557}
+
+\item 
+\hypertarget{ejercicio6_8c_a8ae9d53f33f46cfcfcb9736e6351452a}{\#define {\bfseries K\-E\-Y}~1300}\label{ejercicio6_8c_a8ae9d53f33f46cfcfcb9736e6351452a}
+
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{struct__buffer}{\-\_\-buffer} \hyperlink{ejercicio6_8c_ab5066d1a2f90490cfb3dfe798e5eb250}{shm}
+\begin{DoxyCompactList}\small\item\em Estructura guardada en la region de memoria compartida. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{ejercicio6_8c_ac8cac37112c139e04bba12c6a3b70bb9}{void {\bfseries productor} (\hyperlink{ejercicio6_8c_ab5066d1a2f90490cfb3dfe798e5eb250}{shm} $\ast$buffer, int semid)}\label{ejercicio6_8c_ac8cac37112c139e04bba12c6a3b70bb9}
+
+\item 
+\hypertarget{ejercicio6_8c_aa0df46cb237e3c6423c1ae2692b67766}{void {\bfseries consumidor} (\hyperlink{ejercicio6_8c_ab5066d1a2f90490cfb3dfe798e5eb250}{shm} $\ast$buffer, int semid)}\label{ejercicio6_8c_aa0df46cb237e3c6423c1ae2692b67766}
+
+\item 
+\hypertarget{ejercicio6_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{int {\bfseries main} ()}\label{ejercicio6_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Programa correspondiente al ejercicio 6 de la práctica 3 de Sistemas Operativos. Este programa coordina el uso de memoria compartida y de semaforos para garantizar una buena comunicacion entre dos procesos de ejecucion paralela. Se trata de una representacion del clasico problema de productor -\/ consumidor. En este caso, el proceso productor generara en orden las letras del abecedario y las ira almecenando en un array. Por su parte, el proceso consumidor ira leyendo dichas letras de cada posicion del array siempre y cuando ya hayan sido escritas.
+
+\begin{DoxyAuthor}{Author}
+Luis Carabe y Emilio Cuesta 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+04-\/04-\/2017 
+\end{DoxyDate}
+
+
+\subsection{Typedef Documentation}
+\hypertarget{ejercicio6_8c_ab5066d1a2f90490cfb3dfe798e5eb250}{\index{ejercicio6.\-c@{ejercicio6.\-c}!shm@{shm}}
+\index{shm@{shm}!ejercicio6.c@{ejercicio6.\-c}}
+\subsubsection[{shm}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \-\_\-buffer}  {\bf shm}}}\label{ejercicio6_8c_ab5066d1a2f90490cfb3dfe798e5eb250}
+
+
+Estructura guardada en la region de memoria compartida. 
+
+Esta estructura dispone de un campo\-: una cadena de caracteres que va almacenando progresivamente el alfabeto 

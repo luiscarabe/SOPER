@@ -1,0 +1,21 @@
+#include <sys/types.h>  
+#include <sys/ipc.h>  
+#include <sys/msg.h>  
+#include <stdio.h>
+
+typedef struct _mensaje{
+  long id; /* Identificador del mensaje*/ 
+  /* Informacion que se quiere transmitir*/ 
+  int valor; 
+  char aviso[80];  
+}mensaje; 
+
+int main(int argc, char* argv[]){
+    key_t clave;
+    int msqid, 
+
+    if (argc < 3){
+        perror("Error en los argumentos de entrada");
+        return -1;
+    }
+}

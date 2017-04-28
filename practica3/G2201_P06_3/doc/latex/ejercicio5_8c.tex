@@ -1,0 +1,109 @@
+\hypertarget{ejercicio5_8c}{\section{ejercicio5.\-c File Reference}
+\label{ejercicio5_8c}\index{ejercicio5.\-c@{ejercicio5.\-c}}
+}
+
+
+Programa correspondiente al ejercicio 5 de la práctica 3 de Sistemas Operativos.  
+
+
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$sys/types.\-h$>$}\\*
+{\ttfamily \#include $<$sys/ipc.\-h$>$}\\*
+{\ttfamily \#include $<$sys/sem.\-h$>$}\\*
+{\ttfamily \#include $<$string.\-h$>$}\\*
+{\ttfamily \#include $<$errno.\-h$>$}\\*
+{\ttfamily \#include $<$sys/shm.\-h$>$}\\*
+{\ttfamily \#include $<$unistd.\-h$>$}\\*
+{\ttfamily \#include $<$signal.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}semaforos.\-h\char`\"{}}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct__info}{\-\_\-info}
+\begin{DoxyCompactList}\small\item\em Estructura guardada en la region de memoria compartida. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{ejercicio5_8c_a68c15c5fb7f7c6f707903e6a46ab0557}{\#define {\bfseries F\-I\-L\-E\-K\-E\-Y}~\char`\"{}/bin/cat\char`\"{} /$\ast$Util para ftok $\ast$/}\label{ejercicio5_8c_a68c15c5fb7f7c6f707903e6a46ab0557}
+
+\item 
+\hypertarget{ejercicio5_8c_a8ae9d53f33f46cfcfcb9736e6351452a}{\#define {\bfseries K\-E\-Y}~1300}\label{ejercicio5_8c_a8ae9d53f33f46cfcfcb9736e6351452a}
+
+\item 
+\hypertarget{ejercicio5_8c_a61727cec33cebd106b7ef8fe9e371548}{\#define {\bfseries S\-E\-M\-N\-U\-M}~5}\label{ejercicio5_8c_a61727cec33cebd106b7ef8fe9e371548}
+
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{struct__info}{\-\_\-info} \hyperlink{ejercicio5_8c_adc60ad5b4dd36c641c415957426138f1}{info}
+\begin{DoxyCompactList}\small\item\em Estructura guardada en la region de memoria compartida. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{ejercicio5_8c_a2e45778cce03737c78a651db3863480c}{manejador\-\_\-\-S\-I\-G\-U\-S\-R1} ()
+\begin{DoxyCompactList}\small\item\em Manejador definido para la senial S\-I\-G\-U\-S\-R1. \end{DoxyCompactList}\item 
+int \hyperlink{ejercicio5_8c_a24e00600564507cb4dcf45cd4b915870}{ejercicio2\-Sem} (int num)
+\begin{DoxyCompactList}\small\item\em Esta funcion (del ejercicio 2) crea una zona de memoria compartida, posteriormente, realiza un fork. Desde el proceso hijo se solicita la informacion de los nuevos clientes por pantalla. Desde el proceso padre, se imprime desde el manejador esta informacion cuando se recibe la senial S\-I\-G\-U\-S\-R1 que envia el hijo una vez recibida la informacion. En este ejercicio lo implementamos con semáforos. \end{DoxyCompactList}\item 
+\hypertarget{ejercicio5_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{int \hyperlink{ejercicio5_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{main} ()}\label{ejercicio5_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}
+
+\begin{DoxyCompactList}\small\item\em Funcion main del programa que primero comprueba que todas las funciones de la libreria \hyperlink{semaforos_8h}{semaforos.\-h} realizan bien su trabajo, tras esto, aplicamos las funciones a un ejemplo práctico, como el realizado en el \hyperlink{ejercicio2_8c}{ejercicio2.\-c}, que ahora implementamos con semáforos, quitando el sleep. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{ejercicio5_8c_aa0a3d2a5c3d6ed31abbc992e6bd4ae69}{\hyperlink{ejercicio2_8c_adc60ad5b4dd36c641c415957426138f1}{info} $\ast$ {\bfseries buffer}}\label{ejercicio5_8c_aa0a3d2a5c3d6ed31abbc992e6bd4ae69}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Programa correspondiente al ejercicio 5 de la práctica 3 de Sistemas Operativos. Este programa prueba que funciona nuestra libreria \hyperlink{semaforos_8h}{semaforos.\-h} implementada en el ejercicio anterior
+
+\begin{DoxyAuthor}{Author}
+Luis Carabe y Emilio Cuesta 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+05-\/04-\/2017 
+\end{DoxyDate}
+
+
+\subsection{Typedef Documentation}
+\hypertarget{ejercicio5_8c_adc60ad5b4dd36c641c415957426138f1}{\index{ejercicio5.\-c@{ejercicio5.\-c}!info@{info}}
+\index{info@{info}!ejercicio5.c@{ejercicio5.\-c}}
+\subsubsection[{info}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \-\_\-info}  {\bf info}}}\label{ejercicio5_8c_adc60ad5b4dd36c641c415957426138f1}
+
+
+Estructura guardada en la region de memoria compartida. 
+
+Esta estructura dispone de dos campos, una cadena de caracteres que almacena el nombre de un cliente y un entero que seria su id. 
+
+\subsection{Function Documentation}
+\hypertarget{ejercicio5_8c_a24e00600564507cb4dcf45cd4b915870}{\index{ejercicio5.\-c@{ejercicio5.\-c}!ejercicio2\-Sem@{ejercicio2\-Sem}}
+\index{ejercicio2\-Sem@{ejercicio2\-Sem}!ejercicio5.c@{ejercicio5.\-c}}
+\subsubsection[{ejercicio2\-Sem}]{\setlength{\rightskip}{0pt plus 5cm}int ejercicio2\-Sem (
+\begin{DoxyParamCaption}
+\item[{int}]{num}
+\end{DoxyParamCaption}
+)}}\label{ejercicio5_8c_a24e00600564507cb4dcf45cd4b915870}
+
+
+Esta funcion (del ejercicio 2) crea una zona de memoria compartida, posteriormente, realiza un fork. Desde el proceso hijo se solicita la informacion de los nuevos clientes por pantalla. Desde el proceso padre, se imprime desde el manejador esta informacion cuando se recibe la senial S\-I\-G\-U\-S\-R1 que envia el hijo una vez recibida la informacion. En este ejercicio lo implementamos con semáforos. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & num Numero de usuarios que se van a introducir. \\
+\hline
+\end{DoxyParams}
+\hypertarget{ejercicio5_8c_a2e45778cce03737c78a651db3863480c}{\index{ejercicio5.\-c@{ejercicio5.\-c}!manejador\-\_\-\-S\-I\-G\-U\-S\-R1@{manejador\-\_\-\-S\-I\-G\-U\-S\-R1}}
+\index{manejador\-\_\-\-S\-I\-G\-U\-S\-R1@{manejador\-\_\-\-S\-I\-G\-U\-S\-R1}!ejercicio5.c@{ejercicio5.\-c}}
+\subsubsection[{manejador\-\_\-\-S\-I\-G\-U\-S\-R1}]{\setlength{\rightskip}{0pt plus 5cm}void manejador\-\_\-\-S\-I\-G\-U\-S\-R1 (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{ejercicio5_8c_a2e45778cce03737c78a651db3863480c}
+
+
+Manejador definido para la senial S\-I\-G\-U\-S\-R1. 
+
+Imprime el nombre y el id de un usuario por pantalla 
