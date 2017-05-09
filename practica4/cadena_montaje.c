@@ -11,9 +11,10 @@ typedef struct _mensaje{
 
 int main(int argc, char* argv[]){
     key_t clave;
-    int msqid, idB, idC;
+    int msqid, idB, idC, size;
     int aux = 1;
-    char* buffer[(4*2^10)]
+    char* buffer[4096];
+    char letter;
     mensaje msg;
 
     if (argc != 3){
@@ -51,8 +52,55 @@ int main(int argc, char* argv[]){
             exit(EXIT_FAILURE);
         }
         else if(idC == 0){
-        
+            /*Codigo de C*/
+
+            msgrcv(msqid, (struct msgbuf*) &msg, sizeof(mensaje)-sizeof(long), 2,0);
+            FILE* f2;
+            f2 = fopen(argv[2],'a'); 
+            if(f2 == null){
+                perror("Error abriendo el segundo archivo");
+            write(f2, &msg.mens);
         }
+        else{
+            /*Codigo de B*/
+            msgrcv(msqid, (struct msgbuf*) &msg, sizeof(mensaje)-sizeof(long), 1,0);
+            strcpy(buffer, msg.mens);
+            size = sizeof(buffer)/sizeof(char);
+            
+            for (i=0; i<size; i++){
+
+                letter = msg.mens[i];
+
+                if ((letter > 96) && (letter < 123)){
+             
+                    letter = letter - 32;
+                    msg.mens[i] = letter;
+                }
+                else{
+                    str[i] = msg.mens;
+                }
+            }
+            
+            msg.id = 2;
+            msgsnd(msqid, (struct msgbuf*) &msg, sizeof(mensaje)-sizeof(long), IPC_NOWAIT);
+        
+        
+    }
+    else{
+        /*Codigo de A*/ 
+        FILE* f;
+        f = fopen(argv[1], 'r');
+        if(f == null){
+            perror("Error al abrir el fichero");
+        }
+        while(read(f, &buffer, 4096)){
+
+            msg.id = 1;
+            /*falta la lectura de fichero*/
+            strcpy(msg.mens, buffer);
+
+            msgsnd(msqid, (struct msgbuf*) &msg, sizeof(mensaje)-sizeof(long), IPC_NOWAIT);
+        }       
         
     }
 
