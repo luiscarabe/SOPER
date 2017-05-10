@@ -19,12 +19,10 @@ typedef struct _mensaje{
 
 int main(int argc, char* argv[]){
     key_t clave;
-    int msqid, idB, idC, size, i;   
+    int msqid, idB, idC, size, i, aux;   
     char buffer[4096];
     char letter;
     mensaje msg;
-
-    FILE* fd = fopen("debugging.txt", "a");
     if (argc != 3){
         perror("Error en los argumentos de entrada");
         exit(EXIT_FAILURE);
@@ -34,7 +32,6 @@ int main(int argc, char* argv[]){
         perror("Error al obtener clave para cola mensajes \n");  
         exit(EXIT_FAILURE); 
     }
-    fprintf(fd,"holita\n");
     /* Se crea la cola de mensajes y se obtiene un identificador para ella.  
     * El IPC_CREAT indica que cree la cola de mensajes si no lo está.
     * 0600 son permisos de lectura y escritura para el usuario que lance
@@ -76,10 +73,14 @@ int main(int argc, char* argv[]){
 
             while(msg.flag == 0){
                 msgrcv(msqid, (struct msgbuf*) &msg, sizeof(mensaje)-sizeof(long), 2,0);
-                fwrite(&msg.mens, 4096, 1, f2);
+                if(msg.flag == 1){
+                    fwrite(&msg.mens, 1, strlen(msg.mens)*sizeof(char), f2);
+                    fclose(f2);
+                    exit(EXIT_SUCCESS);
+                }
+                fwrite(&msg.mens, 1, strlen(msg.mens)*sizeof(char), f2);
             }
 
-            fclose(f2);
         }
         else{
             /*Codigo de B*/
@@ -89,9 +90,8 @@ int main(int argc, char* argv[]){
             while(msg.flag == 0){
 
                 msgrcv(msqid, (struct msgbuf*) &msg, sizeof(mensaje)-sizeof(long), 1,0);
-                strcpy(buffer, msg.mens);
-                size = sizeof(buffer)/sizeof(char);
 
+                size = strlen(msg.mens);
                 for (i=0; i<size; i++){
 
                     letter = msg.mens[i];
@@ -104,16 +104,16 @@ int main(int argc, char* argv[]){
                 }
 
                 msg.id = 2;
+                if(msg.flag == 1){
+                    msg.flag = 1;
+                    msgsnd(msqid, (struct msgbuf*) &msg, sizeof(char)*strlen(msg.mens)+sizeof(int), IPC_NOWAIT);  
+                    wait(NULL);
+                    exit(EXIT_SUCCESS);
+                }
+
                 msg.flag = 0;
-                msgsnd(msqid, (struct msgbuf*) &msg, sizeof(mensaje)-sizeof(long)-sizeof(int), IPC_NOWAIT);  
+                msgsnd(msqid, (struct msgbuf*) &msg, sizeof(msg)-sizeof(long)-sizeof(int), IPC_NOWAIT);  
             } 
-
-            msg.id = 2;
-            msg.flag = 1;
-            msgsnd(msqid, (struct msgbuf*) &msg, sizeof(mensaje)-sizeof(long)-sizeof(int), IPC_NOWAIT);  
-
-            wait(NULL);
-            exit(EXIT_SUCCESS);
 
         }
     }
@@ -121,32 +121,41 @@ int main(int argc, char* argv[]){
 
         /*Codigo de A*/ 
         /*FILE* f;*/
-        fprintf(fd, "no entra en el if\n");
 
-        FILE* f = fopen("datos.txt", "r");
+        FILE* f = fopen(argv[1], "r");
         if(f == NULL){
             perror("Error al abrir el fichero");
             exit(EXIT_FAILURE);
         }
-        fprintf(fd, "no entra en el if\n");
 
-        while(fread(&buffer,4096, 1, f)){
+        
+        aux = fread(&buffer,1, 4096, f);
+        while(aux == 4096){
             msg.id = 1;
             fprintf(stdout, "%s", buffer);
             strcpy(msg.mens, buffer);
             msg.flag = 0;
-            msgsnd(msqid, (struct msgbuf*) &msg, sizeof(mensaje)-sizeof(long)-sizeof(int), IPC_NOWAIT);
-            fprintf(fd, "una lectura\n");
+            msgsnd(msqid, (struct msgbuf*) &msg, sizeof(mensaje)-sizeof(long), IPC_NOWAIT);
+            aux = fread(&buffer,1, 4096, f);
+        }        
 
-        }
-        fprintf(stdout, "no entra en el if\n");
-        fclose(fd);
+        fprintf(stdout, "\n\nSEGUNDA SECCION\n\n");
+
+        fprintf(stdout, "%s", buffer);
+
+        strcpy(msg.mens, buffer);
+        fprintf(stdout, "\n\nPRINGAOS\n\n");
+        fprintf(stdout, "%s", msg.mens);
+        msg.mens[aux] = '\0';
+     
+        fprintf(stdout, "\nFIN DEL FICHERO\n");
 
         msg.id = 1;
-        msg.flag = 1;       
-        msgsnd(msqid, (struct msgbuf*) &msg, sizeof(mensaje)-sizeof(long)-sizeof(int), IPC_NOWAIT);
+        msg.flag = 1;
+        msgsnd(msqid, (struct msgbuf*) &msg, sizeof(mensaje)-sizeof(long), IPC_NOWAIT);
+
         wait(NULL);
+        fclose(f);
         exit(EXIT_SUCCESS);
     }
 }
-
