@@ -144,9 +144,8 @@ int main(int argc, char* argv[]){
         fprintf(stdout, "%s", buffer);
 
         strcpy(msg.mens, buffer);
-        fprintf(stdout, "\n\nPRINGAOS\n\n");
-        fprintf(stdout, "%s", msg.mens);
         msg.mens[aux] = '\0';
+        fprintf(stdout, "%s", msg.mens);
      
         fprintf(stdout, "\nFIN DEL FICHERO\n");
 
