@@ -12,6 +12,7 @@ typedef struct _mensaje{
     long id; /* Identificador del mensaje*/ 
     /* Informacion que se quiere transmitir*/ 
     int flag;
+    int nbytes;
     char mens[4096];  
 }mensaje; 
 
@@ -72,9 +73,9 @@ int main(int argc, char* argv[]){
             }
 
             while(msg.flag == 0){
-                msgrcv(msqid, (struct msgbuf*) &msg, sizeof(mensaje)-sizeof(long), 2,0);
+                msgrcv(msqid, (struct msgbuf*) &msg, sizeof(mensaje)-sizeof(long)-sizeof(int), 2,0);
                 if(msg.flag == 1){
-                    fwrite(&msg.mens, 1, strlen(msg.mens)*sizeof(char), f2);
+                    fwrite(&msg.mens, 1, msg.nbytes-1, f2);
                     fclose(f2);
                     exit(EXIT_SUCCESS);
                 }
@@ -84,8 +85,6 @@ int main(int argc, char* argv[]){
         }
         else{
             /*Codigo de B*/
-            /*msgrcv(msqid, (struct msgbuf*) &msg, sizeof(mensaje)-sizeof(long), 1,0);
-            strcpy(buffer, msg.mens);*/
 
             while(msg.flag == 0){
 
@@ -106,7 +105,7 @@ int main(int argc, char* argv[]){
                 msg.id = 2;
                 if(msg.flag == 1){
                     msg.flag = 1;
-                    msgsnd(msqid, (struct msgbuf*) &msg, sizeof(char)*strlen(msg.mens)+sizeof(int), IPC_NOWAIT);  
+                    msgsnd(msqid, (struct msgbuf*) &msg, sizeof(msg)-sizeof(long)-sizeof(int), IPC_NOWAIT);  
                     wait(NULL);
                     exit(EXIT_SUCCESS);
                 }
@@ -140,17 +139,16 @@ int main(int argc, char* argv[]){
         }        
 
         fprintf(stdout, "\n\nSEGUNDA SECCION\n\n");
-
-        fprintf(stdout, "%s", buffer);
-
         strcpy(msg.mens, buffer);
         msg.mens[aux] = '\0';
+
         fprintf(stdout, "%s", msg.mens);
      
         fprintf(stdout, "\nFIN DEL FICHERO\n");
 
         msg.id = 1;
         msg.flag = 1;
+        msg.nbytes = aux;
         msgsnd(msqid, (struct msgbuf*) &msg, sizeof(mensaje)-sizeof(long), IPC_NOWAIT);
 
         wait(NULL);
