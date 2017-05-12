@@ -1,0 +1,82 @@
+\hypertarget{cadena__montaje_8c}{}\section{cadena\+\_\+montaje.\+c File Reference}
+\label{cadena__montaje_8c}\index{cadena\+\_\+montaje.\+c@{cadena\+\_\+montaje.\+c}}
+
+
+Programa correspondiente al ejercicio 1 de la práctica 3 de Sistemas Operativos.  
+
+
+{\ttfamily \#include $<$sys/types.\+h$>$}\\*
+{\ttfamily \#include $<$sys/ipc.\+h$>$}\\*
+{\ttfamily \#include $<$sys/msg.\+h$>$}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$string.\+h$>$}\\*
+{\ttfamily \#include $<$unistd.\+h$>$}\\*
+{\ttfamily \#include $<$fcntl.\+h$>$}\\*
+{\ttfamily \#include $<$sys/wait.\+h$>$}\\*
+Include dependency graph for cadena\+\_\+montaje.\+c\+:
+% FIG 0
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct__mensaje}{\+\_\+mensaje}
+\begin{DoxyCompactList}\small\item\em Estructura que define un mensaje. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define {\bfseries N}~33\hypertarget{cadena__montaje_8c_a0240ac851181b84ac374872dc5434ee4}{}\label{cadena__montaje_8c_a0240ac851181b84ac374872dc5434ee4}
+
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{struct__mensaje}{\+\_\+mensaje} \hyperlink{cadena__montaje_8c_a556052d921c80e21a43f7cc61dc817ac}{mensaje}
+\begin{DoxyCompactList}\small\item\em Estructura que define un mensaje. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{cadena__montaje_8c_a0ddf1224851353fc92bfbff6f499fa97}{main} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Funcion main del programa que realiza la funcionalidad descrita anteriormente. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Programa correspondiente al ejercicio 1 de la práctica 3 de Sistemas Operativos. 
+
+Este programa crea tres procesos\+: el principal, proceso A, que se encarga de hacer un fork para crear el proceso B, y este, a su vez, ejecuta un fork para crear el proceso C. El proceso A leerá de un fichero pasado como argumento cadenas de caracteres de 4096 en 4096, que enviará al proceso B mediante una cola de mensajes, este cambiará todas las letras a mayúsculas y enviará el mensaje transformado al proceso C mediante otro mensaje, para que lo imprime en el segundo fichero pasado como argumento.
+
+\begin{DoxyAuthor}{Author}
+Luis Carabe y Emilio Cuesta 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+12-\/05-\/2017 
+\end{DoxyDate}
+
+
+\subsection{Typedef Documentation}
+\index{cadena\+\_\+montaje.\+c@{cadena\+\_\+montaje.\+c}!mensaje@{mensaje}}
+\index{mensaje@{mensaje}!cadena\+\_\+montaje.\+c@{cadena\+\_\+montaje.\+c}}
+\subsubsection[{\texorpdfstring{mensaje}{mensaje}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \+\_\+mensaje} {\bf mensaje}}\hypertarget{cadena__montaje_8c_a556052d921c80e21a43f7cc61dc817ac}{}\label{cadena__montaje_8c_a556052d921c80e21a43f7cc61dc817ac}
+
+
+Estructura que define un mensaje. 
+
+Tiene cuatro campos, un identificador de mensaje, un flag que nos sirve para saber si se trata de la última lectura , un nbytes que nos da el tamaño del último mensaje y por último el array de chars que forma el mensaje a envíar 
+
+\subsection{Function Documentation}
+\index{cadena\+\_\+montaje.\+c@{cadena\+\_\+montaje.\+c}!main@{main}}
+\index{main@{main}!cadena\+\_\+montaje.\+c@{cadena\+\_\+montaje.\+c}}
+\subsubsection[{\texorpdfstring{main(int argc, char $\ast$argv[])}{main(int argc, char *argv[])}}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+\item[{int}]{argc, }
+\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{cadena__montaje_8c_a0ddf1224851353fc92bfbff6f499fa97}{}\label{cadena__montaje_8c_a0ddf1224851353fc92bfbff6f499fa97}
+
+
+Funcion main del programa que realiza la funcionalidad descrita anteriormente. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em argv\mbox{[}$\,$\mbox{]}} & el primer parámetro es el fichero para leer y el segundo el fichero en el que escribir \\
+\hline
+\end{DoxyParams}

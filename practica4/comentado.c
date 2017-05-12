@@ -1,3 +1,17 @@
+/**
+* @brief Programa correspondiente al ejercicio 1 de la práctica 3 de Sistemas Operativos
+*
+* Este programa crea tres procesos: el principal, proceso A, que se encarga de hacer un fork para crear
+* el proceso B, y este, a su vez, ejecuta un fork para crear el proceso C. El proceso A leerá de un fichero
+* pasado como argumento cadenas de caracteres de 4096 en 4096, que enviará al proceso B mediante una cola de
+* mensajes, este cambiará todas las letras a mayúsculas y enviará el mensaje transformado al proceso C mediante 
+* otro mensaje, para que lo imprime en el segundo fichero pasado como argumento.
+*
+* @file cadena_montaje.c
+* @author Luis Carabe y Emilio Cuesta
+* @date 12-05-2017
+*/
+
 #include <sys/types.h>  
 #include <sys/ipc.h>  
 #include <sys/msg.h>  
@@ -7,6 +21,15 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/wait.h>
+#define N 33
+
+/**
+* @brief Estructura que define un mensaje.
+*
+* Tiene cuatro campos, un identificador de mensaje, un flag que nos sirve
+* para saber si se trata de la última lectura , un nbytes que nos da el tamaño
+* del último mensaje y por último el array de chars que forma el mensaje a envíar
+*/
 
 typedef struct _mensaje{
     long id; /* Identificador del mensaje*/ 
@@ -16,7 +39,11 @@ typedef struct _mensaje{
     char mens[4097];  
 }mensaje; 
 
-#define N 33
+/**
+* @brief Funcion main del programa que realiza la funcionalidad descrita anteriormente.
+* 
+* @param argv[] el primer parámetro es el fichero para leer y el segundo el fichero en el que escribir
+*/
 
 int main(int argc, char* argv[]){
     key_t clave;
@@ -24,6 +51,7 @@ int main(int argc, char* argv[]){
     char buffer[4096];
     char letter;
     mensaje msg;
+    
     if (argc != 3){
         perror("Error en los argumentos de entrada");
         exit(EXIT_FAILURE);
@@ -131,14 +159,20 @@ int main(int argc, char* argv[]){
         aux = fread(&buffer,1, 4096, f);
         while(aux == 4096){
             msg.id = 1;
+            fprintf(stdout, "%s", buffer);
             strcpy(msg.mens, buffer);
             msg.flag = 0;
             msgsnd(msqid, (struct msgbuf*) &msg, sizeof(mensaje)-sizeof(long), IPC_NOWAIT);
             aux = fread(&buffer,1, 4096, f);
         }        
 
+        fprintf(stdout, "\n\nSEGUNDA SECCION\n\n");
         strcpy(msg.mens, buffer);
         msg.mens[aux] = '\0';
+
+        fprintf(stdout, "%s", msg.mens);
+     
+        fprintf(stdout, "\nFIN DEL FICHERO\n");
 
         msg.id = 1;
         msg.flag = 1;
